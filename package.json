@@ -1,0 +1,31 @@
+{
+  "name": "flat",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha -u tdd --reporter spec"
+  },
+  "license": "BSD",
+  "description": "Take a nested Javascript object and flatten it, or unflatten an object with delimited keys",
+  "devDependencies": {
+    "mocha": "~1.6.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hughsk/flat.git"
+  },
+  "keywords": [
+    "flat",
+    "json",
+    "flatten",
+    "unflatten",
+    "split",
+    "object",
+    "nested"
+  ],
+  "author": "Hugh Kennedy <hughskennedy@gmail.com> (http://hughskennedy.com)"
+}
