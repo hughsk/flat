@@ -1,6 +1,6 @@
 var flat = module.exports = {}
 
-var flatten = module.exports.flatten = function (target, delimeter) {
+var flatten = flat.flatten = function (target, delimeter) {
     var output = {}
       , delimeter = delimeter || '.'
 
@@ -25,7 +25,7 @@ var flatten = module.exports.flatten = function (target, delimeter) {
     return output
 };
 
-var unflatten = module.exports.unflatten = function (target, delimeter) {
+var unflatten = flat.unflatten = function (target, delimeter) {
     if (typeof target !== 'object') return target
 
     target = flatten(target, delimeter)
