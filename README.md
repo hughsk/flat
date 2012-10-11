@@ -11,7 +11,7 @@ $ npm install flat
 
 ## Methods
 
-### flat.flatten(original, [delimiter='.'])
+### flat.flatten(original, options)
 
 Flattens the object - it'll return an object one level deep, regardless of how
 nested the original object was:
@@ -36,7 +36,7 @@ flatten({
 // }
 ```
 
-### flat.flatten(original, [delimiter='.'])
+### flat.flatten(original, options)
 
 Flattening is reversible too, you can call `flat.unflatten()` on an object:
 
@@ -57,5 +57,40 @@ unflatten({
 //             nested: true
 //         }
 //     }
+// }
+```
+
+## Options
+
+### delimiter
+
+Use a custom delimiter for (un)flattening your objects, instead of `.`.
+
+### safe
+
+When enabled, both `flat` and `unflatten` will preserve arrays and their
+contents. This is disabled by default.
+
+``` javascript
+var flatten = require('flat').flatten
+
+flatten({
+    this: [
+        { contains: 'arrays' },
+        { preserving: {
+              them: 'for you'
+        }}
+    ]
+}, {
+    safe: true
+})
+
+// {
+//     'this': [
+//         { contains: 'arrays' },
+//         { preserving: {
+//             them: 'for you'
+//         }}
+//     ]
 // }
 ```
