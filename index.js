@@ -12,7 +12,8 @@ var flatten = flat.flatten = function (target, opts) {
     function step(object, prev) {
         Object.keys(object).forEach(function(key) {
             var isarray = opts.safe && Array.isArray(object[key])
-              , isobject = typeof object[key] === 'object'
+              , type = Object.prototype.toString.call(object[key])
+              , isobject = (type === "[object Object]" || type === "[object Array]")
 
             if (!isarray && isobject) {
                 return step(object[key]
