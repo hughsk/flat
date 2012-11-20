@@ -3,6 +3,52 @@ var assert = require('assert')
   , flatten = flat.flatten
   , unflatten = flat.unflatten
 
+suite('Flatten Primitives', function(){
+    test('String', function(){
+        assert.deepEqual(flatten({hello:{world: "good morning"}}),{'hello.world':'good morning'})
+    })
+    test('Number', function(){
+        assert.deepEqual(flatten({hello:{world: 1234.99}}),{'hello.world': 1234.99})
+    })
+    test('Boolean', function(){
+        assert.deepEqual(flatten({hello:{world: true}}),{'hello.world': true})
+        assert.deepEqual(flatten({hello:{world: false}}),{'hello.world': false})
+    })
+    test('Date', function(){
+        var  d = new Date()
+        assert.deepEqual(flatten({hello:{world: d}}),{'hello.world': d})
+    })
+    test('Null', function(){
+        assert.deepEqual(flatten({hello:{world: null}}),{'hello.world': null})
+    })
+    test('Undefined', function(){
+        assert.deepEqual(flatten({hello:{world: undefined}}),{'hello.world': undefined})
+    })
+})
+
+suite('Unflatten Primitives', function(){
+    test('String', function(){
+        assert.deepEqual(unflatten({'hello.world':'good morning'}),{hello:{world: "good morning"}})
+    })
+    test('Number', function(){
+        assert.deepEqual(unflatten({'hello.world': 1234.99}),{hello:{world: 1234.99}})
+    })
+    test('Boolean', function(){
+        assert.deepEqual(unflatten({'hello.world': true}),{hello:{world: true}})
+        assert.deepEqual(unflatten({'hello.world': false}),{hello:{world: false}})
+    })
+    test('Date', function(){
+        var  d = new Date()
+        assert.deepEqual(unflatten({'hello.world': d}),{hello:{world: d}})
+    })
+    test('Null', function(){
+        assert.deepEqual(unflatten({'hello.world': null}),{hello:{world: null}})
+    })
+    test('Undefined', function(){
+        assert.deepEqual(unflatten({'hello.world': undefined}),{hello:{world: undefined}})
+    })
+})
+
 suite('Flatten', function() {
     test('Nested once', function() {
         assert.deepEqual(flatten({
