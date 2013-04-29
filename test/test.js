@@ -244,7 +244,7 @@ suite('Arrays', function() {
     test('Should be able to revert and reverse array serialization via unflatten', function() {
         assert.deepEqual(object, unflatten(flatObject));
     });
-    test('Array typed objects should be resorted by unflatten', function () {
+    test('Array typed objects should be restored by unflatten', function () {
         assert.equal(Object.prototype.toString.call(object.a), Object.prototype.toString.call(unflatten(flatObject).a));
     })
 });
