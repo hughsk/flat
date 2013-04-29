@@ -31,35 +31,36 @@ var flatten = flat.flatten = function (target, opts) {
 };
 
 var unflatten = flat.unflatten = function (target, opts) {
-    if (typeof target !== 'object') return target
+    var opts = opts || {}, delimiter = opts.delimiter || '.', result = {};
 
-    var opts = opts || {}
-      , delimiter = opts.delimiter || '.'
-
-    if (opts.safe && Array.isArray(target)) {
-        return target.map(function(value) {
-            return unflatten(value, opts);
-        });
+    if (Object.prototype.toString.call(target) !== '[object Object]') {
+        return target;
     }
 
-    target = flatten(target, opts)
+    function getkey(key) {
+        var parsedKey = parseInt(key);
+        return (isNaN(parsedKey) ? key : parsedKey);
+    }
 
-    var unflat = Object.keys(target).reduce(function (memo, key) {
-        var split = key.split(delimiter)
-          , first = split.shift()
+    Object.keys(target).forEach(function(key) {
+        var split = key.split(delimiter), firstNibble, secondNibble, recipient = result;
 
-        if (split.length < 1) {
-            memo[key] = target[key]
-            return memo
+        firstNibble = getkey(split.shift());
+        secondNibble = getkey(split[0]);
+        while (secondNibble !== undefined) {
+            if (recipient[firstNibble] === undefined) {
+                recipient[firstNibble] = ((typeof secondNibble === 'number') ? [] : {});
+            }
+
+            recipient = recipient[firstNibble];
+            if (split.length > 0) {
+                firstNibble = getkey(split.shift());
+                secondNibble = getkey(split[0]);
+            }
         }
 
-        memo[first] = memo[first] || {}
-        memo[first][split.join(delimiter)] = target[key]
-
-        memo[first] = unflatten(memo[first], opts)
-
-        return memo;
-    }, {})
-
-    return unflat
+        //unflatten again for 'messy objects' //@see test
+        recipient[firstNibble] = unflatten(target[key]);
+    });
+    return result;
 };
