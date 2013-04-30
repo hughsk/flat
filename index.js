@@ -31,36 +31,43 @@ var flatten = flat.flatten = function (target, opts) {
 };
 
 var unflatten = flat.unflatten = function (target, opts) {
-    var opts = opts || {}, delimiter = opts.delimiter || '.', result = {};
+    var opts = opts || {}
+      , delimiter = opts.delimiter || '.'
+      , result = {}
 
     if (Object.prototype.toString.call(target) !== '[object Object]') {
-        return target;
+        return target
     }
 
     function getkey(key) {
-        var parsedKey = parseInt(key);
-        return (isNaN(parsedKey) ? key : parsedKey);
-    }
+        var parsedKey = parseInt(key)
+        return (isNaN(parsedKey) ? key : parsedKey)
+    };
 
     Object.keys(target).forEach(function(key) {
-        var split = key.split(delimiter), firstNibble, secondNibble, recipient = result;
+        var split = key.split(delimiter)
+          , firstNibble
+          , secondNibble
+          , recipient = result
 
-        firstNibble = getkey(split.shift());
-        secondNibble = getkey(split[0]);
+        firstNibble = getkey(split.shift())
+        secondNibble = getkey(split[0])
+
         while (secondNibble !== undefined) {
             if (recipient[firstNibble] === undefined) {
-                recipient[firstNibble] = ((typeof secondNibble === 'number') ? [] : {});
+                recipient[firstNibble] = ((typeof secondNibble === 'number') ? [] : {})
             }
 
-            recipient = recipient[firstNibble];
+            recipient = recipient[firstNibble]
             if (split.length > 0) {
-                firstNibble = getkey(split.shift());
-                secondNibble = getkey(split[0]);
+                firstNibble = getkey(split.shift())
+                secondNibble = getkey(split[0])
             }
         }
 
-        //unflatten again for 'messy objects' //@see test
-        recipient[firstNibble] = unflatten(target[key]);
+        // unflatten again for 'messy objects'
+        recipient[firstNibble] = unflatten(target[key])
     });
-    return result;
+
+    return result
 };
