@@ -231,4 +231,20 @@ suite('Unflatten', function() {
             })
         })
     })
-})
+});
+
+suite('Arrays', function() {
+    var object, flatObject;
+    object = { "a": ["foo", "bar"] };
+    flatObject = { "a.0": "foo", "a.1": "bar"};
+
+    test('Should be able to flatten arrays properly', function() {
+        assert.deepEqual(flatObject, flatten(object));
+    });
+    test('Should be able to revert and reverse array serialization via unflatten', function() {
+        assert.deepEqual(object, unflatten(flatObject));
+    });
+    test('Array typed objects should be restored by unflatten', function () {
+        assert.equal(Object.prototype.toString.call(object.a), Object.prototype.toString.call(unflatten(flatObject).a));
+    })
+});
