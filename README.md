@@ -36,7 +36,7 @@ flatten({
 // }
 ```
 
-### flat.flatten(original, options)
+### flat.unflatten(original, options)
 
 Flattening is reversible too, you can call `flat.unflatten()` on an object:
 
