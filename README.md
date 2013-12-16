@@ -94,3 +94,24 @@ flatten({
 //     ]
 // }
 ```
+
+### object
+
+When enabled, arrays will not be created automatically when using calling
+unflatten, like so:
+
+``` javascript
+unflatten({
+    'hello.you.0': 'ipsum',
+    'hello.you.1': 'lorem',
+    'hello.other.world': 'foo'
+}, { object: true })
+
+// hello: {
+//     you: {
+//         0: 'ipsum',
+//         1: 'lorem',
+//     },
+//     other: { world: 'foo' }
+// }
+```
