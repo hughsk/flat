@@ -55,7 +55,7 @@ var unflatten = flat.unflatten = function (target, opts) {
 
         while (secondNibble !== undefined) {
             if (recipient[firstNibble] === undefined) {
-                recipient[firstNibble] = ((typeof secondNibble === 'number') ? [] : {})
+                recipient[firstNibble] = ((typeof secondNibble === 'number') && !opts.object ? [] : {})
             }
 
             recipient = recipient[firstNibble]
