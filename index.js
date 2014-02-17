@@ -1,73 +1,87 @@
-var flat = module.exports = {}
+var flat = module.exports = {
+    flatten: flatten
+  , unflatten: unflatten
+}
 
-var flatten = flat.flatten = function (target, opts) {
-    var output = {}
-      , opts = opts || {}
-      , delimiter = opts.delimiter || '.'
+function flatten(target, opts) {
+  opts = opts || {}
 
-    function getkey(key, prev) {
-        return prev ? prev + delimiter + key : key
-    };
+  var delimiter = opts.delimiter || '.'
+  var output = {}
 
-    function step(object, prev) {
-        Object.keys(object).forEach(function(key) {
-            var isarray = opts.safe && Array.isArray(object[key])
-              , type = Object.prototype.toString.call(object[key])
-              , isobject = (type === "[object Object]" || type === "[object Array]")
+  function step(object, prev) {
+    Object.keys(object).forEach(function(key) {
+      var value = object[key]
+      var isarray = opts.safe && Array.isArray(value)
+      var type = Object.prototype.toString.call(value)
+      var isobject = (
+        type === "[object Object]" ||
+        type === "[object Array]"
+      )
 
-            if (!isarray && isobject) {
-                return step(object[key]
-                    , getkey(key, prev)
-                )
-            }
+      var newKey = prev
+        ? prev + delimiter + key
+        : key
 
-            output[getkey(key, prev)] = object[key]
-        });
-    };
+      if (!isarray && isobject) {
+        return step(value, newKey)
+      }
 
-    step(target)
+      output[newKey] = value
+    })
+  }
 
-    return output
-};
+  step(target)
 
-var unflatten = flat.unflatten = function (target, opts) {
-    var opts = opts || {}
-      , delimiter = opts.delimiter || '.'
-      , result = {}
+  return output
+}
 
-    if (Object.prototype.toString.call(target) !== '[object Object]') {
-        return target
+function unflatten(target, opts) {
+  opts = opts || {}
+
+  var delimiter = opts.delimiter || '.'
+  var result = {}
+
+  if (Object.prototype.toString.call(target) !== '[object Object]') {
+    return target
+  }
+
+  // safely ensure that the key is
+  // an integer.
+  function getkey(key) {
+    var parsedKey = Number(key)
+
+    return (
+      isNaN(parsedKey) ||
+      key.indexOf('.') !== -1
+    ) ? key
+      : parsedKey
+  }
+
+  Object.keys(target).forEach(function(key) {
+    var split = key.split(delimiter)
+    var key1 = getkey(split.shift())
+    var key2 = getkey(split[0])
+    var recipient = result
+
+    while (key2 !== undefined) {
+      if (recipient[key1] === undefined) {
+        recipient[key1] = (
+          typeof key2 === 'number' &&
+          !opts.object ? [] : {}
+        )
+      }
+
+      recipient = recipient[key1]
+      if (split.length > 0) {
+        key1 = getkey(split.shift())
+        key2 = getkey(split[0])
+      }
     }
 
-    function getkey(key) {
-        var parsedKey = Number(key)
-        return (isNaN(parsedKey) ? key : parsedKey)
-    };
+    // unflatten again for 'messy objects'
+    recipient[key1] = unflatten(target[key])
+  })
 
-    Object.keys(target).forEach(function(key) {
-        var split = key.split(delimiter)
-          , firstNibble
-          , secondNibble
-          , recipient = result
-
-        firstNibble = getkey(split.shift())
-        secondNibble = getkey(split[0])
-
-        while (secondNibble !== undefined) {
-            if (recipient[firstNibble] === undefined) {
-                recipient[firstNibble] = ((typeof secondNibble === 'number') && !opts.object ? [] : {})
-            }
-
-            recipient = recipient[firstNibble]
-            if (split.length > 0) {
-                firstNibble = getkey(split.shift())
-                secondNibble = getkey(split[0])
-            }
-        }
-
-        // unflatten again for 'messy objects'
-        recipient[firstNibble] = unflatten(target[key])
-    });
-
-    return result
-};
+  return result
+}
