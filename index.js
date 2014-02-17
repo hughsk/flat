@@ -40,7 +40,7 @@ var unflatten = flat.unflatten = function (target, opts) {
     }
 
     function getkey(key) {
-        var parsedKey = parseInt(key)
+        var parsedKey = Number(key)
         return (isNaN(parsedKey) ? key : parsedKey)
     };
 

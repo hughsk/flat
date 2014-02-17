@@ -284,4 +284,9 @@ suite('Arrays', function() {
     test('Array typed objects should be restored by unflatten', function () {
         assert.equal(Object.prototype.toString.call(object.a), Object.prototype.toString.call(unflatten(flatObject).a));
     })
+    test('Do not include keys with numbers inside them', function() {
+        var object = { '1key': { '2_key': 'ok' } }
+        var flat = { '1key.2_key': 'ok' }
+        assert.deepEqual(unflatten(flat), object)
+    })
 });
