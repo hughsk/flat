@@ -1,6 +1,10 @@
-var flat = module.exports = {
+var flat = {
     flatten: flatten
   , unflatten: unflatten
+}
+
+if (typeof module != 'undefined' && module.exports) {
+  module.exports = flat;
 }
 
 function flatten(target, opts) {
