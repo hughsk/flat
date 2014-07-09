@@ -1,7 +1,6 @@
-var flat = module.exports = {
-    flatten: flatten
-  , unflatten: unflatten
-}
+var flat = module.exports = flatten
+flatten.flatten = flatten
+flatten.unflatten = unflatten
 
 function flatten(target, opts) {
   opts = opts || {}
