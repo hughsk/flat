@@ -11,13 +11,13 @@ $ npm install flat
 
 ## Methods
 
-### flat.flatten(original, options)
+### flatten(original, options)
 
 Flattens the object - it'll return an object one level deep, regardless of how
 nested the original object was:
 
 ``` javascript
-var flatten = require('flat').flatten
+var flatten = require('flat')
 
 flatten({
     key1: {
@@ -36,9 +36,9 @@ flatten({
 // }
 ```
 
-### flat.unflatten(original, options)
+### unflatten(original, options)
 
-Flattening is reversible too, you can call `flat.unflatten()` on an object:
+Flattening is reversible too, you can call `flatten.unflatten()` on an object:
 
 ``` javascript
 var unflatten = require('flat').unflatten
@@ -72,7 +72,7 @@ When enabled, both `flat` and `unflatten` will preserve arrays and their
 contents. This is disabled by default.
 
 ``` javascript
-var flatten = require('flat').flatten
+var flatten = require('flat')
 
 flatten({
     this: [
