@@ -22,7 +22,7 @@ function flatten(target, opts) {
         ? prev + delimiter + key
         : key
 
-      if (!isarray && isobject) {
+      if (!isarray && isobject && Object.keys(value).length) {
         return step(value, newKey)
       }
 
