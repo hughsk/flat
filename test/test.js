@@ -138,6 +138,22 @@ suite('Flatten', function() {
       'hello.empty.nested': new Uint8Array([1,2,3,4])
     })
   })
+
+  test('Custom Depth', function() {
+    assert.deepEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, {
+      maxDepth: 2
+    }), {
+      'hello.world': {
+        again: 'good morning'
+      }
+    })
+  })
 })
 
 suite('Unflatten', function() {

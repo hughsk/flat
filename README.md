@@ -135,3 +135,27 @@ Without `overwrite` set to `true`, the `TRAVIS` key would already have been set 
 
 This only makes sense on ordered arrays, and since we're overwriting data, should be used with care.
 
+
+### maxDepth
+
+Maximum number of nested objects to flatten.
+
+``` javascript
+var flatten = require('flat')
+
+flatten({
+    key1: {
+        keyA: 'valueI'
+    },
+    key2: {
+        keyB: 'valueII'
+    },
+    key3: { a: { b: { c: 2 } } }
+}, { maxDepth: 2 })
+
+// {
+//   'key1.keyA': 'valueI',
+//   'key2.keyB': 'valueII',
+//   'key3.a': { b: { c: 2 } }
+// }
+```
