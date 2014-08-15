@@ -17,7 +17,7 @@ Flattens the object - it'll return an object one level deep, regardless of how
 nested the original object was:
 
 ``` javascript
-var flatten = require('flat')
+var flatten = require('flat').flatten
 
 flatten({
     key1: {
@@ -72,7 +72,7 @@ When enabled, both `flat` and `unflatten` will preserve arrays and their
 contents. This is disabled by default.
 
 ``` javascript
-var flatten = require('flat')
+var flatten = require('flat').flatten
 
 flatten({
     this: [
