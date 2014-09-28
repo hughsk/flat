@@ -3,7 +3,7 @@
   "version": "1.2.1",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha -u tdd --reporter spec"
+    "test": "mocha -u tdd --reporter spec"
   },
   "license": "BSD",
   "description": "Take a nested Javascript object and flatten it, or unflatten an object with delimited keys",
@@ -27,5 +27,9 @@
     "object",
     "nested"
   ],
-  "author": "Hugh Kennedy <hughskennedy@gmail.com> (http://hughskennedy.com)"
+  "author": "Hugh Kennedy <hughskennedy@gmail.com> (http://hughskennedy.com)",
+  "bugs": {
+    "url": "https://github.com/hughsk/flat/issues"
+  },
+  "homepage": "https://github.com/hughsk/flat"
 }
