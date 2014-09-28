@@ -102,6 +102,22 @@ suite('Flatten', function() {
       'hello:world:again': 'good morning'
     })
   })
+
+  test('Custom Depth', function() {
+    assert.deepEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, {
+      maxDepth: 2
+    }), {
+      'hello.world': {
+        again: 'good morning'
+      }
+    })
+  })
 })
 
 suite('Unflatten', function() {

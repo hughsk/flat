@@ -6,6 +6,8 @@ function flatten(target, opts) {
   opts = opts || {}
 
   var delimiter = opts.delimiter || '.'
+  var maxDepth = opts.maxDepth
+  var currentDepth = 1
   var output = {}
 
   function step(object, prev) {
@@ -22,7 +24,12 @@ function flatten(target, opts) {
         ? prev + delimiter + key
         : key
 
-      if (!isarray && isobject) {
+      if (!opts.maxDepth) {
+        maxDepth = currentDepth + 1;
+      }
+
+      if (!isarray && isobject && currentDepth < maxDepth) {
+        ++currentDepth
         return step(value, newKey)
       }
 
