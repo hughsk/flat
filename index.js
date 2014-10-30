@@ -1,7 +1,3 @@
-var flat = module.exports = flatten
-flatten.flatten = flatten
-flatten.unflatten = unflatten
-
 function flatten(target, opts) {
   opts = opts || {}
 
@@ -84,3 +80,11 @@ function unflatten(target, opts) {
 
   return result
 }
+
+var flat = flatten
+if (typeof module !== "undefined") {
+   module.exports = flatten
+}
+
+flatten.flatten = flatten
+flatten.unflatten = unflatten
