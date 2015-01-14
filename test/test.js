@@ -175,6 +175,22 @@ suite('Unflatten', function() {
     }))
   })
 
+  test('Overwrite', function() {
+    assert.deepEqual({
+      travis: {
+        build: {
+          dir: "/home/travis/build/kvz/environmental"
+        }
+      }
+    }, unflatten({
+      travis: "true",
+      travis_build_dir: "/home/travis/build/kvz/environmental"
+    }, {
+      delimiter: '_',
+      overwrite: true,
+    }))
+  })
+
   test('Messy', function() {
     assert.deepEqual({
       hello: { world: 'again' },

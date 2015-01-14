@@ -39,6 +39,7 @@ function unflatten(target, opts) {
   opts = opts || {}
 
   var delimiter = opts.delimiter || '.'
+  var overwrite = opts.overwrite || false
   var result = {}
 
   if (Object.prototype.toString.call(target) !== '[object Object]') {
@@ -64,7 +65,13 @@ function unflatten(target, opts) {
     var recipient = result
 
     while (key2 !== undefined) {
-      if (recipient[key1] === undefined) {
+      var type = Object.prototype.toString.call(recipient[key1])
+      var isobject = (
+        type === "[object Object]" ||
+        type === "[object Array]"
+      )
+
+      if ((overwrite && !isobject) || (!overwrite && recipient[key1] === undefined)) {
         recipient[key1] = (
           typeof key2 === 'number' &&
           !opts.object ? [] : {}

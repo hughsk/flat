@@ -115,3 +115,23 @@ unflatten({
 //     other: { world: 'foo' }
 // }
 ```
+
+### overwrite
+
+When enabled, existing keys in the unflattened object may be overwritten if they cannot hold a newly encountered nested value:
+
+```javascript
+unflatten({
+    'TRAVIS': 'true',
+    'TRAVIS_DIR': '/home/travis/build/kvz/environmental'
+}, { overwrite: true })
+
+// TRAVIS: {
+//     DIR: '/home/travis/build/kvz/environmental'
+// }
+```
+
+Without `overwrite` set to `true`, the `TRAVIS` key would already have been set to a string, thus could not accept the nested `DIR` element.
+
+This only makes sense on ordered arrays, and since we're overwriting data, should be used with care.
+
