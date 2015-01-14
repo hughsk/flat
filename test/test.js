@@ -102,6 +102,18 @@ suite('Flatten', function() {
       'hello:world:again': 'good morning'
     })
   })
+
+  test('Empty Objects', function() {
+    assert.deepEqual(flatten({
+      hello: {
+        empty: {
+          nested: { }
+        }
+      }
+    }), {
+      'hello.empty.nested': { }
+    })
+  })
 })
 
 suite('Unflatten', function() {
