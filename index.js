@@ -13,6 +13,7 @@ function flatten(target, opts) {
       var value = object[key]
       var isarray = opts.safe && Array.isArray(value)
       var type = Object.prototype.toString.call(value)
+      var isbuffer = isBuffer(value)
       var isobject = (
         type === "[object Object]" ||
         type === "[object Array]"
@@ -22,7 +23,7 @@ function flatten(target, opts) {
         ? prev + delimiter + key
         : key
 
-      if (!isarray && isobject && Object.keys(value).length) {
+      if (!isarray && !isbuffer && isobject && Object.keys(value).length) {
         return step(value, newKey)
       }
 
@@ -42,7 +43,8 @@ function unflatten(target, opts) {
   var overwrite = opts.overwrite || false
   var result = {}
 
-  if (Object.prototype.toString.call(target) !== '[object Object]') {
+  var isbuffer = isBuffer(target)
+  if (isbuffer || Object.prototype.toString.call(target) !== '[object Object]') {
     return target
   }
 
@@ -90,4 +92,9 @@ function unflatten(target, opts) {
   })
 
   return result
+}
+
+function isBuffer(value) {
+  if (typeof Buffer === 'undefined') return false
+  return Buffer.isBuffer(value)
 }
