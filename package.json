@@ -5,7 +5,7 @@
   "scripts": {
     "test": "mocha -u tdd --reporter spec"
   },
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "description": "Take a nested Javascript object and flatten it, or unflatten an object with delimited keys",
   "devDependencies": {
     "mocha": "~1.6.0"
