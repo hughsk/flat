@@ -97,8 +97,7 @@ flatten({
 
 ### object
 
-When enabled, arrays will not be created automatically when using calling
-unflatten, like so:
+When enabled, arrays will not be created automatically when calling unflatten, like so:
 
 ``` javascript
 unflatten({
