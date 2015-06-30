@@ -154,7 +154,29 @@ suite('Flatten', function() {
       }
     })
   })
-})
+
+  test('Uniform Flatten with Depth', function(){
+    assert.deepEqual(flatten({
+      hello: {
+          world: {again: 'good morning'}
+      },
+      salut: {
+          monde: {encore: {bonne: 'matin'}}
+      },
+      konnichiwa: { sekai: { mou: { ohayou: 'gozaimasu' } } }
+    }, { 
+      maxDepth: 3,  
+      uniformFlatten: true
+    }),
+    { 
+      'hello.world.again': 'good morning',
+      'salut.monde.encore': { bonne: 'matin' },
+      'konnichiwa.sekai.mou': { ohayou: 'gozaimasu' } 
+    });
+  })
+});
+
+
 
 suite('Unflatten', function() {
   test('Nested once', function() {
