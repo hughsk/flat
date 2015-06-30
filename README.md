@@ -158,3 +158,30 @@ flatten({
 //   'key3.a': { b: { c: 2 } }
 // }
 ```
+
+### uniformFlatten
+
+If maxDepth is set, will flatten each object in the collection to the depth specified by maxDepth. This uniformly flattens the object at the depth specified.
+
+This is usually set in combination with the maxDepth option.
+
+``` javascript
+var flatten = require('flat')
+
+flatten({
+    key1: {
+        keyA: {a: 'valueI'}
+    },
+    key2: {
+        keyB: {a: {b: 'valueII'}}
+    },
+    key3: { a: { b: { c: 2 } } }
+}, { maxDepth: 2,  uniformFlatten: true})
+
+
+//{ 
+//   'key1.keyA.a': 'valueI',
+//   'key2.keyB.a': { b: 'valueII' },
+//   'key3.a.b': { c: 2 } 
+//}
+```
