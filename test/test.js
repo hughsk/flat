@@ -409,6 +409,15 @@ suite('Arrays', function() {
     }))
   })
 
+  test('Should be able to unflatten flat objects inside a regular array', function() {
+    assert.deepEqual(
+      [{ 'f' : { 'data' : 'foo'}}, { 'b' : { 'data' : 'bar'}}]
+    , unflatten([
+        {'f.data': 'foo'}
+      , {'b.data': 'bar'}
+    ]))
+  })
+
   test('Array typed objects should be restored by unflatten', function () {
     assert.equal(
         Object.prototype.toString.call(['foo', 'bar'])

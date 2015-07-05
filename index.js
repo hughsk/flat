@@ -50,6 +50,15 @@ function unflatten(target, opts) {
   var overwrite = opts.overwrite || false
   var result = {}
 
+  // if an array is passed unflatten each entry
+  if (Object.prototype.toString.call(target) === '[object Array]') {
+    var r = [];
+    target.map(function(entry){
+      r.push(unflatten(entry, opts));
+    });
+    return r;
+  }
+
   var isbuffer = isBuffer(target)
   if (isbuffer || Object.prototype.toString.call(target) !== '[object Object]') {
     return target
