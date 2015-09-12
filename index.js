@@ -52,11 +52,9 @@ function unflatten(target, opts) {
 
   // if an array is passed unflatten each entry
   if (Object.prototype.toString.call(target) === '[object Array]') {
-    var r = [];
-    target.map(function(entry){
-      r.push(unflatten(entry, opts));
+    return target.map(function(entry){
+       return unflatten(entry, opts);
     });
-    return r;
   }
 
   var isbuffer = isBuffer(target)
