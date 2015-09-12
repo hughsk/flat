@@ -154,6 +154,24 @@ suite('Flatten', function() {
       }
     })
   })
+
+  test('Custom Checker', function() {
+    assert.deepEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        },
+        everyone: {
+          again: 'good evening'
+        }
+      }
+    }, {check: function(value) {return value.again != 'good morning'}}), {
+      'hello.world': {
+          again: 'good morning'
+      },
+      'hello.everyone.again': 'good evening'
+    })
+  })
 })
 
 suite('Unflatten', function() {
