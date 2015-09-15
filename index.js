@@ -10,6 +10,8 @@ function flatten(target, opts) {
   var currentDepth = 1
   var output = {}
 
+  var changed = false
+
   function step(object, prev) {
     Object.keys(object).forEach(function(key) {
       var value = object[key]
@@ -34,19 +36,28 @@ function flatten(target, opts) {
         return step(value, newKey)
       }
 
+      if (newKey !== key) {
+        changed = true
+      }
+
       output[newKey] = value
     })
   }
 
   step(target)
 
-  return output
+  if (changed) {
+    return output
+  } else {
+    return target
+  }
 }
 
 function unflatten(target, opts) {
   opts = opts || {}
 
   var delimiter = opts.delimiter || '.'
+  var shallow = opts.shallow || false
   var overwrite = opts.overwrite || false
   var result = {}
 
@@ -54,6 +65,8 @@ function unflatten(target, opts) {
   if (isbuffer || Object.prototype.toString.call(target) !== '[object Object]') {
     return target
   }
+
+  var changed = false
 
   // safely ensure that the key is
   // an integer.
@@ -74,6 +87,8 @@ function unflatten(target, opts) {
     var recipient = result
 
     while (key2 !== undefined) {
+      changed = true
+
       var type = Object.prototype.toString.call(recipient[key1])
       var isobject = (
         type === "[object Object]" ||
@@ -94,11 +109,21 @@ function unflatten(target, opts) {
       }
     }
 
-    // unflatten again for 'messy objects'
-    recipient[key1] = unflatten(target[key], opts)
+    if (!shallow) {
+      // unflatten again for 'messy objects'
+      var value = target[key]
+      recipient[key1] = unflatten(target[key], opts)
+      changed = changed || value !== recipient[key1]
+    } else {
+      recipient[key1] = target[key]
+    }
   })
 
-  return result
+  if (changed) {
+    return result
+  } else {
+    return target
+  }
 }
 
 function isBuffer(value) {
