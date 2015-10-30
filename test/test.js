@@ -103,6 +103,21 @@ suite('Flatten', function() {
     })
   })
 
+  test('Custom Prefix', function() {
+    assert.deepEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, {
+      prefix: 'urn:',
+	  delimiter: ':'
+    }), {
+      'urn:hello:world:again': 'good morning'
+    })
+  })
+
   test('Empty Objects', function() {
     assert.deepEqual(flatten({
       hello: {
@@ -212,6 +227,21 @@ suite('Unflatten', function() {
       'hello world again': 'good morning'
     }, {
       delimiter: ' '
+    }))
+  })
+
+  test('Custom Prefix', function() {
+    assert.deepEqual({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, unflatten({
+      'eh, hello world again': 'good morning'
+    }, {
+      delimiter: ' ',
+	  prefix: 'eh, '
     }))
   })
 

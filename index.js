@@ -7,6 +7,7 @@ function flatten(target, opts) {
 
   var delimiter = opts.delimiter || '.'
   var maxDepth = opts.maxDepth
+  var prefix = opts.prefix || ''
   var currentDepth = 1
   var output = {}
 
@@ -23,7 +24,7 @@ function flatten(target, opts) {
 
       var newKey = prev
         ? prev + delimiter + key
-        : key
+        : prefix + key
 
       if (!opts.maxDepth) {
         maxDepth = currentDepth + 1;
@@ -48,6 +49,7 @@ function unflatten(target, opts) {
 
   var delimiter = opts.delimiter || '.'
   var overwrite = opts.overwrite || false
+  var prefix = opts.prefix || ''
   var result = {}
 
   var isbuffer = isBuffer(target)
@@ -68,7 +70,7 @@ function unflatten(target, opts) {
   }
 
   Object.keys(target).forEach(function(key) {
-    var split = key.split(delimiter)
+    var split = key.slice(prefix.length).split(delimiter)
     var key1 = getkey(split.shift())
     var key2 = getkey(split[0])
     var recipient = result
