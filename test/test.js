@@ -118,6 +118,20 @@ suite('Flatten', function() {
     })
   })
 
+  test('Custom Delimiter defaults to Prefix', function() {
+    assert.deepEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, {
+      prefix: ':',
+    }), {
+      ':hello:world:again': 'good morning'
+    })
+  })
+
   test('Empty Objects', function() {
     assert.deepEqual(flatten({
       hello: {
@@ -242,6 +256,20 @@ suite('Unflatten', function() {
     }, {
       delimiter: ' ',
 	  prefix: 'eh, '
+    }))
+  })
+
+  test('Custom Delimiter defaults to Prefix', function() {
+    assert.deepEqual({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, unflatten({
+      ':hello:world:again': 'good morning'
+    }, {
+	  prefix: ':'
     }))
   })
 

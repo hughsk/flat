@@ -5,7 +5,7 @@ flatten.unflatten = unflatten
 function flatten(target, opts) {
   opts = opts || {}
 
-  var delimiter = opts.delimiter || '.'
+  var delimiter = opts.delimiter || opts.prefix || '.'
   var maxDepth = opts.maxDepth
   var prefix = opts.prefix || ''
   var currentDepth = 1
@@ -47,7 +47,7 @@ function flatten(target, opts) {
 function unflatten(target, opts) {
   opts = opts || {}
 
-  var delimiter = opts.delimiter || '.'
+  var delimiter = opts.delimiter || opts.prefix || '.'
   var overwrite = opts.overwrite || false
   var prefix = opts.prefix || ''
   var result = {}
