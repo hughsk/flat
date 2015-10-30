@@ -66,6 +66,10 @@ unflatten({
 
 Use a custom delimiter for (un)flattening your objects, instead of `.`.
 
+### prefix
+
+Use a custom prefix for (un)flattening your objects, instead of ``.  The prefix is added to each key name.  `delimiter` default to this value if it is defined.
+
 ### safe
 
 When enabled, both `flat` and `unflatten` will preserve arrays and their
