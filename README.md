@@ -68,7 +68,7 @@ Use a custom delimiter for (un)flattening your objects, instead of `.`.
 
 ### prefix
 
-Use a custom prefix for (un)flattening your objects.  The `prefix` is added to the start each key name.  `delimiter` defaults to this value if it is defined.
+Use a custom prefix for (un)flattening your objects.  The `prefix` is added to the start of each key name.  `delimiter` defaults to this value if it is defined.
 
 ### safe
 
