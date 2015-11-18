@@ -103,6 +103,22 @@ suite('Flatten', function() {
     })
   })
 
+  test('Custom Two Character Delimiter', function() {
+    assert.deepEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, {
+      delimiter: '()'
+    }), {
+      'hello(world)(again)': 'good morning'
+    })
+  })
+
+
+
   test('Empty Objects', function() {
     assert.deepEqual(flatten({
       hello: {
@@ -212,6 +228,20 @@ suite('Unflatten', function() {
       'hello world again': 'good morning'
     }, {
       delimiter: ' '
+    }))
+  })
+
+  test('Custom Two Character Delimiter', function() {
+    assert.deepEqual({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, unflatten({
+      'hello[world][again]': 'good morning'
+    }, {
+      delimiter: '[]'
     }))
   })
 
