@@ -65,6 +65,7 @@ unflatten({
 ### delimiter
 
 Use a custom delimiter for (un)flattening your objects, instead of `.`.
+To use bracket notation set the delimiter option to `[]`,`{}`, or `()`.
 
 ### safe
 

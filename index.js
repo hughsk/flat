@@ -22,7 +22,7 @@ function flatten(target, opts) {
       )
 
       var newKey = prev
-        ? prev + delimiter + key
+        ? prev + delimit(delimiter, key)
         : key
 
       if (!opts.maxDepth) {
@@ -68,7 +68,7 @@ function unflatten(target, opts) {
   }
 
   Object.keys(target).forEach(function(key) {
-    var split = key.split(delimiter)
+    var split = splitkey(key, delimiter)
     var key1 = getkey(split.shift())
     var key2 = getkey(split[0])
     var recipient = result
@@ -105,3 +105,35 @@ function isBuffer(value) {
   if (typeof Buffer === 'undefined') return false
   return Buffer.isBuffer(value)
 }
+
+// add delimiters to a key
+// 1-2 characters
+// 2 characters will be treated as brackets 
+// ex. delimit('[]', 'hi') = '[hi]'
+function delimit(delimiter, key) {
+  if (delimiter.length == 1) {
+    return delimiter + key
+  }
+  else {
+    var delimiters = delimiter.split('')
+    return delimiters[0] + key + delimiters[1]
+  }
+}
+
+// split a key by a delimiter(s)
+// 1 or 2 characters
+// 2 characters treated as brackets
+function splitkey(key, delimiter){
+  if (delimiter.length == 1) {
+    return key.split(delimiter)
+  }
+  else if (delimiter.length == 2) {
+    var delimiters = delimiter.split('')
+    var regex = new RegExp('\\'+delimiters[1] , 'g')
+    //remove trailing bracket from string
+    var result = key.replace(regex, '')
+    //split on leading bracket
+    return (result.split(delimiters[0]))
+  }
+}
+
