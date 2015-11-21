@@ -1,3 +1,5 @@
+var isBuffer = require('is-buffer')
+
 var flat = module.exports = flatten
 flatten.flatten = flatten
 flatten.unflatten = unflatten
@@ -99,9 +101,4 @@ function unflatten(target, opts) {
   })
 
   return result
-}
-
-function isBuffer(value) {
-  if (typeof Buffer === 'undefined') return false
-  return Buffer.isBuffer(value)
 }
