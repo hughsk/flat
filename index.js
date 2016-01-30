@@ -82,7 +82,12 @@ function unflatten(target, opts) {
         type === "[object Array]"
       )
 
-      if ((overwrite && !isobject) || (!overwrite && recipient[key1] === undefined)) {
+      // do not write over falsey, non-undefined values if overwrite is false
+      if (!overwrite && !isobject && typeof recipient[key1] !== 'undefined') {
+        return
+      }
+
+      if ((overwrite && !isobject) || (!overwrite && recipient[key1] == null)) {
         recipient[key1] = (
           typeof key2 === 'number' &&
           !opts.object ? [] : {}
