@@ -71,6 +71,7 @@ Use a custom delimiter for (un)flattening your objects, instead of `.`.
 When enabled, both `flat` and `unflatten` will preserve arrays and their
 contents. This is disabled by default.
 
+
 ``` javascript
 var flatten = require('flat')
 
@@ -157,4 +158,15 @@ flatten({
 //   'key2.keyB': 'valueII',
 //   'key3.a': { b: { c: 2 } }
 // }
+```
+### shallow
+
+When enabled, nested flattened objects are preserved when unflattening.
+
+```
+unflatten({ "foo.bar": { "fiz.fuz": "hello" }})
+// { foo: { bar: { "fiz": { "fuz": "hello" } } }
+
+unflatten({ "foo.bar": { "fiz.fuz": "hello" }}, { shallow: true })
+// { foo: { bar: { "fiz.fuz": "hello" } }
 ```
