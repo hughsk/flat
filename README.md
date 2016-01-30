@@ -158,3 +158,33 @@ flatten({
 //   'key3.a': { b: { c: 2 } }
 // }
 ```
+
+### check
+
+Check value for some condition. If returns `true` value will be flattened.
+
+```javascript
+var flatten = require('flat')
+
+flatten({
+  hello: {
+    world: {
+      again: 'good morning'
+    },
+    everyone: {
+      again: 'good evening'
+    }
+  }
+}, {
+    check: function(value) {
+        return value.again != 'good morning'
+    }
+})
+
+// {
+//   'hello.world': {
+//     again: 'good morning'
+//   },
+//   'hello.everyone.again': 'good evening'
+// }
+```

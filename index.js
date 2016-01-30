@@ -11,6 +11,7 @@ function flatten(target, opts) {
   var maxDepth = opts.maxDepth
   var currentDepth = 1
   var output = {}
+  var check = opts.check || function() {return true}
 
   function step(object, prev) {
     Object.keys(object).forEach(function(key) {
@@ -31,7 +32,7 @@ function flatten(target, opts) {
         maxDepth = currentDepth + 1;
       }
 
-      if (!isarray && !isbuffer && isobject && Object.keys(value).length && currentDepth < maxDepth) {
+      if (!isarray && !isbuffer && isobject && check(value) && Object.keys(value).length && currentDepth < maxDepth) {
         ++currentDepth
         return step(value, newKey)
       }
