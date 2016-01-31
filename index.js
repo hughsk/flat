@@ -9,11 +9,11 @@ function flatten(target, opts) {
 
   var delimiter = opts.delimiter || '.'
   var maxDepth = opts.maxDepth
-  var currentDepth = 1
-  var output = {}
-
-  function step(object, prev) {
-    Object.keys(object).forEach(function(key) {
+  var output = {};
+  var numberToFlatten = 1;
+  function step(object, prev, currentDepth) {
+    currentDepth = currentDepth || 1;
+    Object.keys(object).forEach(function(key) { 
       var value = object[key]
       var isarray = opts.safe && Array.isArray(value)
       var type = Object.prototype.toString.call(value)
@@ -28,19 +28,20 @@ function flatten(target, opts) {
         : key
 
       if (!opts.maxDepth) {
-        maxDepth = currentDepth + 1;
+        maxDepth = numberToFlatten + 1;
       }
 
-      if (!isarray && !isbuffer && isobject && Object.keys(value).length && currentDepth < maxDepth) {
-        ++currentDepth
-        return step(value, newKey)
+      var flattenCondition = (opts.uniformFlatten) ? currentDepth : numberToFlatten
+      if (!isarray && !isbuffer && isobject && Object.keys(value).length && flattenCondition < maxDepth) {
+        ++numberToFlatten;
+        return step(value, newKey, currentDepth + 1)
       }
-
+      
       output[newKey] = value
     })
   }
 
-  step(target)
+  step(target);
 
   return output
 }
