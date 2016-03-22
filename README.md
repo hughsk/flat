@@ -158,3 +158,27 @@ flatten({
 //   'key3.a': { b: { c: 2 } }
 // }
 ```
+
+### filter
+
+Decide if a value should be flattened any further
+
+```javascript
+var flatten = require('flat')
+
+flatten({
+    key1: {
+        keyA: 'valueI'
+    },
+    key2: {
+        keyB: 'valueII'
+    }
+}, { filter: (value) => !value.keyA }) // skip key1
+
+// {
+//   key1: {
+//       keyA: 'valueI'
+//   },
+//   'key2.keyB': 'valueII'
+// }
+```
