@@ -188,6 +188,7 @@ suite('Unflatten', function() {
         }
       },
       world: {
+        greet: 'hello',
         lorem: {
           ipsum: 'again',
           dolor: 'sit'
@@ -197,7 +198,8 @@ suite('Unflatten', function() {
       'hello.lorem.ipsum': 'again',
       'hello.lorem.dolor': 'sit',
       'world.lorem.ipsum': 'again',
-      'world.lorem.dolor': 'sit'
+      'world.lorem.dolor': 'sit',
+      'world': {greet: 'hello'}
     }))
   })
 
