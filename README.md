@@ -66,6 +66,15 @@ unflatten({
 
 Use a custom delimiter for (un)flattening your objects, instead of `.`.
 
+### toUpperCase
+
+Use a toUpperCase option for flattening your objects and upper case object keys at the same time.
+This can be handy when working with constants, i.e. `API_KEY: 'some key'`
+
+### toLowerCase
+
+Use a toLowerCase option for flattening your objects and lower case object keys at the same time.
+
 ### safe
 
 When enabled, both `flat` and `unflatten` will preserve arrays and their
