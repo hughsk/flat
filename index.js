@@ -9,10 +9,10 @@ function flatten(target, opts) {
 
   var delimiter = opts.delimiter || '.'
   var maxDepth = opts.maxDepth
-  var currentDepth = 1
   var output = {}
 
-  function step(object, prev) {
+  function step(object, prev, currentDepth) {
+    currentDepth = currentDepth ? currentDepth : 1
     Object.keys(object).forEach(function(key) {
       var value = object[key]
       var isarray = opts.safe && Array.isArray(value)
@@ -27,13 +27,9 @@ function flatten(target, opts) {
         ? prev + delimiter + key
         : key
 
-      if (!opts.maxDepth) {
-        maxDepth = currentDepth + 1;
-      }
-
-      if (!isarray && !isbuffer && isobject && Object.keys(value).length && currentDepth < maxDepth) {
-        ++currentDepth
-        return step(value, newKey)
+      if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
+        (!opts.maxDepth || currentDepth < maxDepth)) {
+        return step(value, newKey, currentDepth + 1)
       }
 
       output[newKey] = value
