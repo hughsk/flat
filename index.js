@@ -70,14 +70,7 @@ function unflatten(target, opts) {
   }
 
   var sortedKeys = Object.keys(target).sort(function(keyA, keyB) {
-    var diff = keyA.length - keyB.length
-    if (diff < 0) {
-      return -1
-    } else if (diff > 0) {
-      return 1
-    } else {
-      return 0
-    }
+    return keyA.length - keyB.length
   })
 
   sortedKeys.forEach(function(key) {
