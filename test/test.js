@@ -103,7 +103,7 @@ suite('Flatten', function() {
     })
   })
 
-  test('Custom Prefix', function() {
+  test('Custom keyname', function() {
     assert.deepEqual(flatten({
       hello: {
         world: {
@@ -111,22 +111,9 @@ suite('Flatten', function() {
         }
       }
     }, {
-      prefix: 'urn:',
-	  delimiter: ':'
-    }), {
-      'urn:hello:world:again': 'good morning'
-    })
-  })
-
-  test('Custom Delimiter defaults to Prefix', function() {
-    assert.deepEqual(flatten({
-      hello: {
-        world: {
-          again: 'good morning'
-        }
+      keyname: function(prev, key) {
+        return prev ? prev + ':' + key : ':' + key
       }
-    }, {
-      prefix: ':',
     }), {
       ':hello:world:again': 'good morning'
     })
@@ -174,12 +161,20 @@ suite('Flatten', function() {
         world: {
           again: 'good morning'
         }
+      },
+      lorem: {
+        ipsum: {
+          dolor: 'good evening'
+        }
       }
     }, {
       maxDepth: 2
     }), {
       'hello.world': {
         again: 'good morning'
+      },
+      'lorem.ipsum': {
+        dolor: 'good evening'
       }
     })
   })
@@ -244,22 +239,7 @@ suite('Unflatten', function() {
     }))
   })
 
-  test('Custom Prefix', function() {
-    assert.deepEqual({
-      hello: {
-        world: {
-          again: 'good morning'
-        }
-      }
-    }, unflatten({
-      'eh, hello world again': 'good morning'
-    }, {
-      delimiter: ' ',
-	  prefix: 'eh, '
-    }))
-  })
-
-  test('Custom Delimiter defaults to Prefix', function() {
+  test('Custom keynames', function() {
     assert.deepEqual({
       hello: {
         world: {
@@ -269,7 +249,9 @@ suite('Unflatten', function() {
     }, unflatten({
       ':hello:world:again': 'good morning'
     }, {
-	  prefix: ':'
+      keynames: function(key) {
+        return key.substr(1).split(':')
+      }
     }))
   })
 
@@ -319,6 +301,27 @@ suite('Unflatten', function() {
         'testing.this': 'out'
       }
     }))
+  })
+
+  suite('Overwrite + non-object values in key positions', function() {
+    test('non-object keys + overwrite should be overwritten', function() {
+      assert.deepEqual(flat.unflatten({ a: null, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
+      assert.deepEqual(flat.unflatten({ a: 0, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
+      assert.deepEqual(flat.unflatten({ a: 1, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
+      assert.deepEqual(flat.unflatten({ a: '', 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
+    })
+
+    test('overwrite value should not affect undefined keys', function() {
+      assert.deepEqual(flat.unflatten({ a: undefined, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
+      assert.deepEqual(flat.unflatten({ a: undefined, 'a.b': 'c' }, {overwrite: false}), { a: { b: 'c' } })
+    })
+
+    test('if no overwrite, should ignore nested values under non-object key', function() {
+      assert.deepEqual(flat.unflatten({ a: null, 'a.b': 'c' }), { a: null })
+      assert.deepEqual(flat.unflatten({ a: 0, 'a.b': 'c' }), { a: 0 })
+      assert.deepEqual(flat.unflatten({ a: 1, 'a.b': 'c' }), { a: 1 })
+      assert.deepEqual(flat.unflatten({ a: '', 'a.b': 'c' }), { a: '' })
+    })
   })
 
   suite('.safe', function() {

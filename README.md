@@ -66,9 +66,33 @@ unflatten({
 
 Use a custom delimiter for (un)flattening your objects, instead of `.`.
 
-### prefix
+### keyname
 
-Use a custom prefix for (un)flattening your objects.  The `prefix` is added to the start of each key name.  `delimiter` defaults to this value if it is defined.
+Use a custom `function` to flatten the keyname.  By default, the `delimiter` is inserted between `prev` and `next`
+
+Here's an example that uses a colon (':') to prefix and delimit the keyname
+
+````javascript
+var o = {
+  hello: {
+    world: {
+      again: 'good morning'
+}}}
+
+flatten(o, { keyname: function(prev, next) {
+  return prev 
+    ? prev + ':' + next 
+    : ':' + next
+}})
+      
+// {
+//  ':hello:world:again': 'good morning'
+// }
+````
+
+### keynames
+
+Use a custom `function` to unflatten the keyname.  It  returns an array of key names.  This is the inverse of [keyname](#keyname). By default, the `delimiter` is used to [split](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split) the name.
 
 ### safe
 
