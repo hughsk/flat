@@ -98,7 +98,9 @@ function unflatten(target, opts) {
     }
 
     // unflatten again for 'messy objects'
-    recipient[key1] = unflatten(target[key], opts)
+    if (!opts.safe) {
+      recipient[key1] = unflatten(target[key], opts)
+    }
   })
 
   return result
