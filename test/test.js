@@ -162,6 +162,18 @@ suite('Flatten', function() {
       }
     })
   })
+
+  test('Should keep number in the right when object', function() {
+      assert.deepEqual(flatten({
+        hello: {
+          '0200': 'world',
+          '0500': 'darkness my old friend'
+        }
+      }), {
+        'hello.0200': 'world',
+        'hello.0500': 'darkness my old friend'
+      })
+  })
 })
 
 suite('Unflatten', function() {
@@ -373,6 +385,22 @@ suite('Unflatten', function() {
         }
       }, unflattened);
       assert(!Array.isArray(unflattened.hello.you));
+    })
+
+    test('Should keep the zero in the right when a object is true', function() {
+        var unflattened = unflatten({
+          'hello.0200': 'world',
+          'hello.0500': 'darkness my old friend'
+        }, {
+          object: true
+        });
+
+        assert.deepEqual({
+            hello: {
+              '0200': 'world',
+              '0500': 'darkness my old friend'
+            }
+        }, unflattened);
     })
 
     test('Should not create object when false', function() {

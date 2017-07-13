@@ -60,7 +60,8 @@ function unflatten(target, opts) {
 
     return (
       isNaN(parsedKey) ||
-      key.indexOf('.') !== -1
+      key.indexOf('.') !== -1 ||
+      opts.object
     ) ? key
       : parsedKey
   }
