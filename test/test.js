@@ -163,7 +163,7 @@ suite('Flatten', function() {
     })
   })
 
-  test('Should keep number in the right when object', function() {
+  test('Should keep number in the left when object', function() {
       assert.deepEqual(flatten({
         hello: {
           '0200': 'world',
@@ -387,7 +387,7 @@ suite('Unflatten', function() {
       assert(!Array.isArray(unflattened.hello.you));
     })
 
-    test('Should keep the zero in the right when a object is true', function() {
+    test('Should keep the zero in the left when object is true', function() {
         var unflattened = unflatten({
           'hello.0200': 'world',
           'hello.0500': 'darkness my old friend'
