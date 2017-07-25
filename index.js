@@ -9,6 +9,14 @@ function flatten(target, opts) {
 
   var delimiter = opts.delimiter || '.'
   var maxDepth = opts.maxDepth
+
+  function flattenKeyname(prev, key) {
+    return prev
+      ? prev + delimiter + key
+      : key
+  }
+
+  var keyname = opts.keyname || flattenKeyname;
   var output = {}
 
   function step(object, prev, currentDepth) {
@@ -23,9 +31,7 @@ function flatten(target, opts) {
         type === "[object Array]"
       )
 
-      var newKey = prev
-        ? prev + delimiter + key
-        : key
+      var newKey = keyname(prev, key)
 
       if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
         (!opts.maxDepth || currentDepth < maxDepth)) {
@@ -53,6 +59,12 @@ function unflatten(target, opts) {
     return target
   }
 
+  function unflattenKeyname(key) {
+    return key.split(delimiter)
+  }
+
+  var keynames = opts.keynames || unflattenKeyname;
+
   // safely ensure that the key is
   // an integer.
   function getkey(key) {
@@ -67,7 +79,7 @@ function unflatten(target, opts) {
   }
 
   Object.keys(target).forEach(function(key) {
-    var split = key.split(delimiter)
+    var split = keynames(key)
     var key1 = getkey(split.shift())
     var key2 = getkey(split[0])
     var recipient = result

@@ -103,6 +103,22 @@ suite('Flatten', function() {
     })
   })
 
+  test('Custom keyname', function() {
+    assert.deepEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, {
+      keyname: function(prev, key) {
+        return prev ? prev + ':' + key : ':' + key
+      }
+    }), {
+      ':hello:world:again': 'good morning'
+    })
+  })
+
   test('Empty Objects', function() {
     assert.deepEqual(flatten({
       hello: {
@@ -232,6 +248,22 @@ suite('Unflatten', function() {
       'hello world again': 'good morning'
     }, {
       delimiter: ' '
+    }))
+  })
+
+  test('Custom keynames', function() {
+    assert.deepEqual({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, unflatten({
+      ':hello:world:again': 'good morning'
+    }, {
+      keynames: function(key) {
+        return key.substr(1).split(':')
+      }
     }))
   })
 
