@@ -103,6 +103,34 @@ suite('Flatten', function() {
     })
   })
 
+  test('To upper case', function() {
+    assert.deepEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, {
+      toUpperCase: true
+    }), {
+      'HELLO.WORLD.AGAIN': 'good morning'
+    })
+  }) 
+
+  test('To lower case', function() {
+    assert.deepEqual(flatten({
+      HELLO: {
+        WORLD: {
+          AGAIN: 'good morning'
+        }
+      }
+    }, {
+      toLowerCase: true
+    }), {
+      'hello.world.again': 'good morning'
+    })
+  })
+
   test('Empty Objects', function() {
     assert.deepEqual(flatten({
       hello: {

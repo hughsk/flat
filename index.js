@@ -8,6 +8,8 @@ function flatten(target, opts) {
   opts = opts || {}
 
   var delimiter = opts.delimiter || '.'
+  var lowerCase = opts.toLowerCase || false
+  var upperCase = opts.toUpperCase || false
   var maxDepth = opts.maxDepth
   var output = {}
 
@@ -32,6 +34,12 @@ function flatten(target, opts) {
         return step(value, newKey, currentDepth + 1)
       }
 
+      if (lowerCase) {
+        newKey = newKey.toLowerCase()
+      }
+      if (upperCase) {
+        newKey = newKey.toUpperCase()
+      }
       output[newKey] = value
     })
   }
