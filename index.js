@@ -56,6 +56,10 @@ function unflatten(target, opts) {
   // safely ensure that the key is
   // an integer.
   function getkey(key) {
+    if (opts.object) {
+      return key;
+    }
+
     var parsedKey = Number(key)
 
     return (
