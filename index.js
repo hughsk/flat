@@ -1,26 +1,26 @@
 var isBuffer = require('is-buffer')
 
-var flat = module.exports = flatten
+module.exports = flatten
 flatten.flatten = flatten
 flatten.unflatten = unflatten
 
-function flatten(target, opts) {
+function flatten (target, opts) {
   opts = opts || {}
 
   var delimiter = opts.delimiter || '.'
   var maxDepth = opts.maxDepth
   var output = {}
 
-  function step(object, prev, currentDepth) {
-    currentDepth = currentDepth ? currentDepth : 1
-    Object.keys(object).forEach(function(key) {
+  function step (object, prev, currentDepth) {
+    currentDepth = currentDepth || 1
+    Object.keys(object).forEach(function (key) {
       var value = object[key]
       var isarray = opts.safe && Array.isArray(value)
       var type = Object.prototype.toString.call(value)
       var isbuffer = isBuffer(value)
       var isobject = (
-        type === "[object Object]" ||
-        type === "[object Array]"
+        type === '[object Object]' ||
+        type === '[object Array]'
       )
 
       var newKey = prev
@@ -41,7 +41,7 @@ function flatten(target, opts) {
   return output
 }
 
-function unflatten(target, opts) {
+function unflatten (target, opts) {
   opts = opts || {}
 
   var delimiter = opts.delimiter || '.'
@@ -55,7 +55,7 @@ function unflatten(target, opts) {
 
   // safely ensure that the key is
   // an integer.
-  function getkey(key) {
+  function getkey (key) {
     var parsedKey = Number(key)
 
     return (
@@ -66,11 +66,11 @@ function unflatten(target, opts) {
       : parsedKey
   }
 
-  var sortedKeys = Object.keys(target).sort(function(keyA, keyB) {
+  var sortedKeys = Object.keys(target).sort(function (keyA, keyB) {
     return keyA.length - keyB.length
   })
 
-  sortedKeys.forEach(function(key) {
+  sortedKeys.forEach(function (key) {
     var split = key.split(delimiter)
     var key1 = getkey(split.shift())
     var key2 = getkey(split[0])
@@ -79,8 +79,8 @@ function unflatten(target, opts) {
     while (key2 !== undefined) {
       var type = Object.prototype.toString.call(recipient[key1])
       var isobject = (
-        type === "[object Object]" ||
-        type === "[object Array]"
+        type === '[object Object]' ||
+        type === '[object Array]'
       )
 
       // do not write over falsey, non-undefined values if overwrite is false

@@ -3,12 +3,13 @@
   "version": "3.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -u tdd --reporter spec"
+    "test": "mocha -u tdd --reporter spec && standard index.js test/index.js"
   },
   "license": "BSD-3-Clause",
   "description": "Take a nested Javascript object and flatten it, or unflatten an object with delimited keys",
   "devDependencies": {
-    "mocha": "~3.4.2"
+    "mocha": "~3.4.2",
+    "standard": "^10.0.2"
   },
   "directories": {
     "test": "test"
