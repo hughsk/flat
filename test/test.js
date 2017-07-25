@@ -229,6 +229,20 @@ suite('Unflatten', function () {
     }))
   })
 
+  test('nested objects do not clobber each other when a.b inserted before a', function () {
+    var x = {}
+    x['foo.bar'] = {t: 123}
+    x['foo'] = {p: 333}
+    assert.deepEqual(unflatten(x), {
+      foo: {
+        bar: {
+          t: 123
+        },
+        p: 333
+      }
+    })
+  })
+
   test('Custom Delimiter', function () {
     assert.deepEqual({
       hello: {
