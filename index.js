@@ -44,8 +44,13 @@ function flatten (target, opts) {
 function unflatten (target, opts) {
   opts = opts || {}
 
+  if (opts.maxDepth === 0) {
+    return target
+  }
+
   var delimiter = opts.delimiter || '.'
   var overwrite = opts.overwrite || false
+  var maxDepth = opts.maxDepth || Infinity
   var result = {}
 
   var isbuffer = isBuffer(target)
@@ -75,6 +80,7 @@ function unflatten (target, opts) {
     var key1 = getkey(split.shift())
     var key2 = getkey(split[0])
     var recipient = result
+    var depth = 1
 
     while (key2 !== undefined) {
       var type = Object.prototype.toString.call(recipient[key1])
@@ -96,13 +102,18 @@ function unflatten (target, opts) {
       }
 
       recipient = recipient[key1]
-      if (split.length > 0) {
+      if (split.length > 0 && depth < maxDepth) {
         key1 = getkey(split.shift())
         key2 = getkey(split[0])
+      } else {
+        key1 = getkey(split.join(delimiter))
+        key2 = undefined
       }
+      depth += 1
     }
 
     // unflatten again for 'messy objects'
+    opts.maxDepth -= depth
     recipient[key1] = unflatten(target[key], opts)
   })
 

@@ -205,6 +205,51 @@ suite('Unflatten', function () {
     }))
   })
 
+  test('Custom Depth', function () {
+    assert.deepEqual(unflatten({
+      'hello.brave': {
+        'new.world.again': 'good morning'
+      },
+      'all.you.need.is.love': 'love is all you need'
+    },
+    {
+      maxDepth: 3
+    }), {
+      hello: {
+        brave: {
+          'new': {
+            'world.again': 'good morning'
+          }
+        }
+      },
+      all: {
+        you: {
+          need: {
+            'is.love': 'love is all you need'
+          }
+        }
+      }
+    })
+  })
+
+  test('Zero Depth', function () {
+    assert.deepEqual({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, unflatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, {
+      maxDepth: 0
+    }))
+  })
+
   test('Multiple Keys', function () {
     assert.deepEqual({
       hello: {
