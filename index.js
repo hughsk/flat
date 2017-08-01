@@ -12,6 +12,17 @@ function flatten (target, opts) {
   var coercion = opts.coercion
   var output = {}
 
+  function transform (coercion, key, value) {
+    if (!coercion) { return value }
+    let transformed = value
+
+    coercion.forEach(function (c) {
+      transformed = c.test(key, transformed) ? c.transform(transformed) : transformed
+    })
+
+    return transformed
+  }
+
   function step (object, prev, currentDepth) {
     currentDepth = currentDepth || 1
     Object.keys(object).forEach(function (key) {
@@ -28,18 +39,19 @@ function flatten (target, opts) {
         ? prev + delimiter + key
         : key
 
-      if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
-        (!opts.maxDepth || currentDepth < maxDepth)) {
-        return step(value, newKey, currentDepth + 1)
+      const newValue = transform(coercion, key, value)
+
+      if (newValue === value) {
+        if (!isarray &&
+          !isbuffer &&
+          isobject &&
+          Object.keys(value).length &&
+            (!opts.maxDepth || currentDepth < maxDepth)) {
+          return step(value, newKey, currentDepth + 1)
+        }
       }
 
-      if (coercion) {
-        coercion.forEach(function (c) {
-          value = c.test(key, value) ? c.transform(value) : value
-        })
-      }
-
-      output[newKey] = value
+      output[newKey] = newValue
     })
   }
 

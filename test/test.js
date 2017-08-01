@@ -516,7 +516,7 @@ suite('Coercion', function () {
   test('Should coerce by predicate', function () {
     var coercion = [{
       test: function (key, value) { return key === '_id' },
-      transform: function (value) { return 'foo'+value }
+      transform: function (value) { return 'foo' + value }
     }]
     var options = { coercion: coercion }
 
@@ -546,6 +546,31 @@ suite('Coercion', function () {
       }
     }, options), {
       'group1.prop1': 'goodval'
+    })
+  })
+
+  test('Should allow coercion of objects', function () {
+    const SomeObject = function () {
+      this.type = 'sometype'
+      this.value = 'xxx'
+    }
+
+    var coercion = [{
+      test: function (key, value) { return value.type === 'sometype' },
+      transform: function (value) { return value.value }
+    }]
+    var options = { coercion: coercion }
+
+    assert.deepEqual(flatten({
+      group1: {
+        prop1: 'one',
+        prop2: 'two',
+        _id: new SomeObject()
+      }
+    }, options), {
+      'group1.prop1': 'one',
+      'group1.prop2': 'two',
+      'group1._id': 'xxx'
     })
   })
 
