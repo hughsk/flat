@@ -511,3 +511,65 @@ suite('Arrays', function () {
     })
   })
 })
+
+suite('Coercion', function () {
+  test('Should coerce by predicate', function () {
+    var coercion = [{
+      test: function (key, value) { return key === '_id' },
+      transform: function (value) { return 'foo'+value }
+    }]
+    var options = { coercion: coercion }
+
+    assert.deepEqual(flatten({
+      group1: {
+        prop1: 'one',
+        prop2: 'two',
+        _id: 'bar'
+      }
+    }, options), {
+      'group1.prop1': 'one',
+      'group1.prop2': 'two',
+      'group1._id': 'foobar'
+    })
+  })
+
+  test('Should coerce by value', function () {
+    var coercion = [{
+      test: function (key, value) { return value === 'badval' },
+      transform: function (value) { return 'goodval' }
+    }]
+    var options = { coercion: coercion }
+
+    assert.deepEqual(flatten({
+      group1: {
+        prop1: 'badval'
+      }
+    }, options), {
+      'group1.prop1': 'goodval'
+    })
+  })
+
+  test('Cascading coercion', function () {
+    var coercion = [{
+      test: function (key, value) { return key === 'prop1' },
+      transform: function (value) { return 'one' + value }
+    },
+    {
+      test: function (key, value) { return value === 'one two ' },
+      transform: function (value) { return value + 'three' }
+    },
+    {
+      test: function (key, value) { return key === 'prop1' },
+      transform: function (value) { return value + ' four' }
+    }]
+    var options = { coercion: coercion }
+
+    assert.deepEqual(flatten({
+      group1: {
+        prop1: ' two '
+      }
+    }, options), {
+      'group1.prop1': 'one two three four'
+    })
+  })
+})

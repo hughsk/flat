@@ -158,3 +158,27 @@ flatten({
 //   'key3.a': { b: { c: 2 } }
 // }
 ```
+
+### coercion
+
+Optionally run a test/set of tests on your incoming key/value(s) and transform the resulting value if it matches.
+
+```javascript
+var ObjectId = mongoose.Types.ObjectId
+
+var coercion = [{
+    test: function (key, value) { return key === '_id' && ObjectId.isValid(value) }
+    transform: function (value) { return value.valueOf() }
+}]
+var options = { coercion: coercion }
+
+flatten({
+    group1: {
+        prop1: ObjectId('aaabbbcccdddeee')
+    }
+}, options)
+
+// {
+//    'group1.prop1': 'aaabbbcccdddeee'
+// }
+```

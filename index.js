@@ -9,6 +9,7 @@ function flatten (target, opts) {
 
   var delimiter = opts.delimiter || '.'
   var maxDepth = opts.maxDepth
+  var coercion = opts.coercion
   var output = {}
 
   function step (object, prev, currentDepth) {
@@ -30,6 +31,12 @@ function flatten (target, opts) {
       if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
         (!opts.maxDepth || currentDepth < maxDepth)) {
         return step(value, newKey, currentDepth + 1)
+      }
+
+      if (coercion) {
+        coercion.forEach(function (c) {
+          value = c.test(key, value) ? c.transform(value) : value
+        })
       }
 
       output[newKey] = value
