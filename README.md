@@ -1,5 +1,7 @@
 # flat [![Build Status](https://secure.travis-ci.org/hughsk/flat.png?branch=master)](http://travis-ci.org/hughsk/flat)
 
+This is a fork of hughsk/flat that adds an option to snakify all json keys (including nested) before flattening
+
 Take a nested Javascript object and flatten it, or unflatten an object with
 delimited keys.
 
@@ -61,6 +63,10 @@ unflatten({
 ```
 
 ## Options
+
+### snakify
+
+When enabled for `flatten`, each key (nested & unstead) will be formatted using snake_case before flattening.
 
 ### delimiter
 
