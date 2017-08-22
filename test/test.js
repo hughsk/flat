@@ -47,6 +47,16 @@ suite('Unflatten Primitives', function () {
 })
 
 suite('Flatten', function () {
+  test('Snakify keys before flattening', function () {
+    assert.deepEqual(flatten({
+      hello: {
+        worldFooBar: 'good morning'
+      }
+    }, {snakify: true}), {
+      'hello.world_foo_bar': 'good morning'
+    })
+  })
+
   test('Nested once', function () {
     assert.deepEqual(flatten({
       hello: {

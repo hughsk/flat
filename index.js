@@ -1,4 +1,5 @@
 var isBuffer = require('is-buffer')
+var snake = require('to-snake-case')
 
 module.exports = flatten
 flatten.flatten = flatten
@@ -9,11 +10,13 @@ function flatten (target, opts) {
 
   var delimiter = opts.delimiter || '.'
   var maxDepth = opts.maxDepth
+  var snakify = opts.snakify || false
   var output = {}
 
   function step (object, prev, currentDepth) {
     currentDepth = currentDepth || 1
     Object.keys(object).forEach(function (key) {
+      var thisKey = snakify ? snake(key) : key
       var value = object[key]
       var isarray = opts.safe && Array.isArray(value)
       var type = Object.prototype.toString.call(value)
@@ -24,8 +27,8 @@ function flatten (target, opts) {
       )
 
       var newKey = prev
-        ? prev + delimiter + key
-        : key
+        ? prev + delimiter + thisKey
+        : thisKey
 
       if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
         (!opts.maxDepth || currentDepth < maxDepth)) {
