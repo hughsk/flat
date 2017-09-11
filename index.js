@@ -9,6 +9,7 @@ function flatten (target, opts) {
 
   var delimiter = opts.delimiter || '.'
   var maxDepth = opts.maxDepth
+  var useToJSON = opts.useToJSON
   var output = {}
 
   function step (object, prev, currentDepth) {
@@ -23,16 +24,26 @@ function flatten (target, opts) {
         type === '[object Array]'
       )
 
+      var toJSONExists = false
+      var jsonValue = null
+      if (useToJSON && value === Object(value) && // Check if primitive type
+        Object.prototype.toString.call(value.toJSON) === '[object Function]') {
+        jsonValue = value.toJSON()
+        console.log('test ' + value.toJSON())
+        toJSONExists = true
+      }
+
       var newKey = prev
         ? prev + delimiter + key
         : key
 
-      if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
+      if (!isarray && !isbuffer && isobject && !toJSONExists &&
+        Object.keys(value).length &&
         (!opts.maxDepth || currentDepth < maxDepth)) {
         return step(value, newKey, currentDepth + 1)
       }
 
-      output[newKey] = value
+      output[newKey] = toJSONExists ? jsonValue : value
     })
   }
 

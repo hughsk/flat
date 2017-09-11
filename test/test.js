@@ -180,6 +180,29 @@ suite('Flatten', function () {
       'hello.0500': 'darkness my old friend'
     })
   })
+
+  test('Use useToJSON', function () {
+    assert.deepEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning',
+          toJSON: function () {
+            return 'good afternoon'
+          }
+        }
+      },
+      lorem: {
+        ipsum: {
+          dolor: 'good evening'
+        }
+      }
+    }, {
+      useToJSON: true
+    }), {
+      'hello.world': 'good afternoon',
+      'lorem.ipsum.dolor': 'good evening'
+    })
+  })
 })
 
 suite('Unflatten', function () {
