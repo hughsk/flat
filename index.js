@@ -29,7 +29,6 @@ function flatten (target, opts) {
       if (useToJSON && value === Object(value) && // Check if primitive type
         Object.prototype.toString.call(value.toJSON) === '[object Function]') {
         jsonValue = value.toJSON()
-        console.log('test ' + value.toJSON())
         toJSONExists = true
       }
 
