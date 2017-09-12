@@ -158,3 +158,28 @@ flatten({
 //   'key3.a': { b: { c: 2 } }
 // }
 ```
+
+### useToJSON
+
+When enabled, `flat` will check for objects with a `toJSON` function and use the result of that function as a value instead of flattening the object. This is particularly useful for complex objects like MongoDB's ObjectID which contain several fields but actually make more sense to present them as a string.
+
+``` javascript
+var flatten = require('flat')
+
+flatten({
+    key1: {
+        keyA: 'valueI',
+        toJSON: function() {
+            return 'JSONvalueI'
+        }
+    },
+    key2: {
+        keyB: 'valueII'
+    }
+}, { useToJSON: true })
+
+// {
+//   'key1': 'JSONvalueI',
+//   'key2.keyB': 'valueII'
+// }
+```
