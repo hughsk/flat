@@ -9,30 +9,53 @@ function flatten (target, opts) {
 
   var delimiter = opts.delimiter || '.'
   var maxDepth = opts.maxDepth
+  var coercion = opts.coercion
   var output = {}
+
+  function transform (coercion, key, value) {
+    if (!coercion) { return value }
+    let transformed = value
+
+    coercion.forEach(function (c) {
+      transformed = c.test(key, transformed) ? c.transform(transformed) : transformed
+    })
+
+    return transformed
+  }
+
+  function shouldTraverse (value, transformedValue, currentDepth) {
+    var type = Object.prototype.toString.call(value)
+    var isarray = opts.safe && Array.isArray(value)
+    var isbuffer = isBuffer(value)
+    var isobject = (
+      type === '[object Object]' ||
+      type === '[object Array]'
+    )
+
+    return transformedValue === value &&
+      !isarray &&
+      !isbuffer &&
+      isobject &&
+      Object.keys(value).length &&
+      (!opts.maxDepth || currentDepth < maxDepth)
+  }
 
   function step (object, prev, currentDepth) {
     currentDepth = currentDepth || 1
     Object.keys(object).forEach(function (key) {
       var value = object[key]
-      var isarray = opts.safe && Array.isArray(value)
-      var type = Object.prototype.toString.call(value)
-      var isbuffer = isBuffer(value)
-      var isobject = (
-        type === '[object Object]' ||
-        type === '[object Array]'
-      )
 
       var newKey = prev
         ? prev + delimiter + key
         : key
 
-      if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
-        (!opts.maxDepth || currentDepth < maxDepth)) {
+      const transformedValue = transform(coercion, key, value)
+
+      if (shouldTraverse(value, transformedValue, currentDepth)) {
         return step(value, newKey, currentDepth + 1)
       }
 
-      output[newKey] = value
+      output[newKey] = transformedValue
     })
   }
 
