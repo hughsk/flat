@@ -1,5 +1,5 @@
 {
-  "name": "flat",
+  "name": "flatley",
   "version": "4.0.0",
   "main": "index.js",
   "scripts": {
@@ -8,21 +8,23 @@
   "license": "BSD-3-Clause",
   "description": "Take a nested Javascript object and flatten it, or unflatten an object with delimited keys",
   "devDependencies": {
-    "mocha": "~3.4.2",
-    "standard": "^10.0.2"
+    "mocha": "^4.0.1",
+    "standard": "^10.0.3"
   },
   "directories": {
     "test": "test"
   },
   "dependencies": {
-    "is-buffer": "~1.1.5"
+    "is-buffer": "^1.1.6"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/hughsk/flat.git"
+    "url": "git://github.com/antony/flatley.git"
   },
   "keywords": [
     "flat",
+    "flatley",
+    "mongoose",
     "json",
     "flatten",
     "unflatten",
@@ -30,9 +32,9 @@
     "object",
     "nested"
   ],
-  "author": "Hugh Kennedy <hughskennedy@gmail.com> (http://hughskennedy.com)",
+  "author": "Antony Jones <aj@desirableobjects.co.uk>",
   "bugs": {
-    "url": "https://github.com/hughsk/flat/issues"
+    "url": "https://github.com/antony/flatley/issues"
   },
-  "homepage": "https://github.com/hughsk/flat"
+  "homepage": "https://github.com/antony/flatley"
 }
