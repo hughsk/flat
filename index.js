@@ -4,14 +4,15 @@ module.exports = flatten
 flatten.flatten = flatten
 flatten.unflatten = unflatten
 
-function flatten (target, opts) {
+function flatten(target, opts) {
   opts = opts || {}
 
-  var delimiter = opts.delimiter || '.'
-  var maxDepth = opts.maxDepth
-  var output = {}
+  var delimiter = opts.delimiter || '.';
+  var maxDepth = opts.maxDepth;
+  var ignore = opts.ignore || [];
+  var output = {};
 
-  function step (object, prev, currentDepth) {
+  function step(object, prev, currentDepth) {
     currentDepth = currentDepth || 1
     Object.keys(object).forEach(function (key) {
       var value = object[key]
@@ -27,13 +28,20 @@ function flatten (target, opts) {
         ? prev + delimiter + key
         : key
 
-      if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
+      if (ignoreKey(key)) {
+        output[newKey] = value;
+      }
+      else if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
         (!opts.maxDepth || currentDepth < maxDepth)) {
         return step(value, newKey, currentDepth + 1)
+      } else {
+        output[newKey] = value
       }
-
-      output[newKey] = value
     })
+  }
+
+  function ignoreKey(key) {
+    return ignore.filter(function (x) { return x === key; }).length > 0;
   }
 
   step(target)
@@ -41,7 +49,7 @@ function flatten (target, opts) {
   return output
 }
 
-function unflatten (target, opts) {
+function unflatten(target, opts) {
   opts = opts || {}
 
   var delimiter = opts.delimiter || '.'
@@ -55,7 +63,7 @@ function unflatten (target, opts) {
 
   // safely ensure that the key is
   // an integer.
-  function getkey (key) {
+  function getkey(key) {
     var parsedKey = Number(key)
 
     return (
@@ -91,7 +99,7 @@ function unflatten (target, opts) {
       if ((overwrite && !isobject) || (!overwrite && recipient[key1] == null)) {
         recipient[key1] = (
           typeof key2 === 'number' &&
-          !opts.object ? [] : {}
+            !opts.object ? [] : {}
         )
       }
 

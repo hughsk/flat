@@ -158,3 +158,35 @@ flatten({
 //   'key3.a': { b: { c: 2 } }
 // }
 ```
+
+### ignore
+
+Ignore some fields, store the values as is into the flattened output. Ignored fields should be declared as an array of string values. The string value is the exact name of the field. Every occurence of the field will be ignored.
+
+``` javascript
+
+var flatten = require('flat')
+
+flatten({
+    key1: {
+        keyA: 'valueI'
+    },
+    key2: {
+        keyB: 'valueII'
+    },
+    key3: { a: { b: { c: 2 } } }
+}, { ignore: ["key3"] })
+
+// Or
+
+flatten({
+    key1: {
+        keyA: 'valueI'
+    },
+    key2: {
+        keyB: 'valueII'
+    },
+    key3: { a: { b: { c: 2 } } }
+}, { ignore: ["a"] })
+
+```
