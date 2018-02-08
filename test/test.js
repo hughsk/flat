@@ -574,6 +574,28 @@ suite('Coercion', function () {
     })
   })
 
+  test('Should allow coercion of objects returning only object value', function () {
+    const SomeObject = function () {
+      this.type = 'sometype'
+      this.value = 'xxx'
+    }
+
+    var coercion = [{
+      test: function (key, value) { return value.type === 'sometype' },
+      transform: function (value) { return value }
+    }]
+    var options = { coercion: coercion }
+    var object = new SomeObject()
+
+    assert.deepEqual(flatten({
+      group1: {
+        object: object
+      }
+    }, options), {
+      'group1.object': object
+    })
+  })
+
   test('Cascading coercion', function () {
     var coercion = [{
       test: function (key, value) { return key === 'prop1' },
