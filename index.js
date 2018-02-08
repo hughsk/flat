@@ -14,7 +14,7 @@ function flatten (target, opts) {
 
   function transform (coercion, key, value) {
     if (!coercion) { return value }
-    let transformed = value
+    var transformed = value
 
     coercion.forEach(function (c) {
       transformed = c.test(key, transformed) ? c.transform(transformed) : transformed
