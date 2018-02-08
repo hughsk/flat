@@ -5,7 +5,7 @@ delimited keys.
 
 ## Credits
 
-Based on 'flatley' by Hugh Kennedy (http://hughskennedy.com)
+Based on 'flat' by Hugh Kennedy (http://hughskennedy.com)
 
 ## Installation
 
