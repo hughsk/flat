@@ -1,9 +1,9 @@
 /* globals suite test */
 
 var assert = require('assert')
-var flat = require('../index')
-var flatten = flat.flatten
-var unflatten = flat.unflatten
+var flatley = require('../index')
+var flatten = flatley.flatten
+var unflatten = flatley.unflatten
 
 var primitives = {
   String: 'good morning',
@@ -307,22 +307,22 @@ suite('Unflatten', function () {
 
   suite('Overwrite + non-object values in key positions', function () {
     test('non-object keys + overwrite should be overwritten', function () {
-      assert.deepEqual(flat.unflatten({ a: null, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
-      assert.deepEqual(flat.unflatten({ a: 0, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
-      assert.deepEqual(flat.unflatten({ a: 1, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
-      assert.deepEqual(flat.unflatten({ a: '', 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
+      assert.deepEqual(unflatten({ a: null, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
+      assert.deepEqual(unflatten({ a: 0, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
+      assert.deepEqual(unflatten({ a: 1, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
+      assert.deepEqual(unflatten({ a: '', 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
     })
 
     test('overwrite value should not affect undefined keys', function () {
-      assert.deepEqual(flat.unflatten({ a: undefined, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
-      assert.deepEqual(flat.unflatten({ a: undefined, 'a.b': 'c' }, {overwrite: false}), { a: { b: 'c' } })
+      assert.deepEqual(unflatten({ a: undefined, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
+      assert.deepEqual(unflatten({ a: undefined, 'a.b': 'c' }, {overwrite: false}), { a: { b: 'c' } })
     })
 
     test('if no overwrite, should ignore nested values under non-object key', function () {
-      assert.deepEqual(flat.unflatten({ a: null, 'a.b': 'c' }), { a: null })
-      assert.deepEqual(flat.unflatten({ a: 0, 'a.b': 'c' }), { a: 0 })
-      assert.deepEqual(flat.unflatten({ a: 1, 'a.b': 'c' }), { a: 1 })
-      assert.deepEqual(flat.unflatten({ a: '', 'a.b': 'c' }), { a: '' })
+      assert.deepEqual(unflatten({ a: null, 'a.b': 'c' }), { a: null })
+      assert.deepEqual(unflatten({ a: 0, 'a.b': 'c' }), { a: 0 })
+      assert.deepEqual(unflatten({ a: 1, 'a.b': 'c' }), { a: 1 })
+      assert.deepEqual(unflatten({ a: '', 'a.b': 'c' }), { a: '' })
     })
   })
 
@@ -508,6 +508,167 @@ suite('Arrays', function () {
       '1key': {
         '2_key': 'ok'
       }
+    })
+  })
+})
+
+suite('Coercion', function () {
+  test('Should coerce by predicate', function () {
+    var coercion = [{
+      test: function (key, value) { return key === '_id' },
+      transform: function (value) { return 'foo' + value }
+    }]
+    var options = { coercion: coercion }
+
+    assert.deepEqual(flatten({
+      group1: {
+        prop1: 'one',
+        prop2: 'two',
+        _id: 'bar'
+      }
+    }, options), {
+      'group1.prop1': 'one',
+      'group1.prop2': 'two',
+      'group1._id': 'foobar'
+    })
+  })
+
+  test('Should coerce by value', function () {
+    var coercion = [{
+      test: function (key, value) { return value === 'badval' },
+      transform: function (value) { return 'goodval' }
+    }]
+    var options = { coercion: coercion }
+
+    assert.deepEqual(flatten({
+      group1: {
+        prop1: 'badval'
+      }
+    }, options), {
+      'group1.prop1': 'goodval'
+    })
+  })
+
+  test('Should allow coercion of objects', function () {
+    const SomeObject = function () {
+      this.type = 'sometype'
+      this.value = 'xxx'
+    }
+
+    var coercion = [{
+      test: function (key, value) { return value.type === 'sometype' },
+      transform: function (value) { return value.value }
+    }]
+    var options = { coercion: coercion }
+
+    assert.deepEqual(flatten({
+      group1: {
+        prop1: 'one',
+        prop2: 'two',
+        _id: new SomeObject()
+      }
+    }, options), {
+      'group1.prop1': 'one',
+      'group1.prop2': 'two',
+      'group1._id': 'xxx'
+    })
+  })
+
+  test('Cascading coercion', function () {
+    var coercion = [{
+      test: function (key, value) { return key === 'prop1' },
+      transform: function (value) { return 'one' + value }
+    },
+    {
+      test: function (key, value) { return value === 'one two ' },
+      transform: function (value) { return value + 'three' }
+    },
+    {
+      test: function (key, value) { return key === 'prop1' },
+      transform: function (value) { return value + ' four' }
+    }]
+    var options = { coercion: coercion }
+
+    assert.deepEqual(flatten({
+      group1: {
+        prop1: ' two '
+      }
+    }, options), {
+      'group1.prop1': 'one two three four'
+    })
+  })
+})
+
+suite('Filtering', function () {
+  test('Should allow filtering of specific objects so that they are not flattened', function () {
+    const SomeObject = function () {
+      this.type = 'sometype'
+      this.value = 'xxx'
+    }
+
+    var filters = [{
+      test: function (key, value) { return value.type === 'sometype' }
+    }]
+
+    var options = { filters: filters }
+    var object = new SomeObject()
+
+    assert.deepEqual(flatten({
+      group1: {
+        object: object
+      }
+    }, options), {
+      'group1.object': object
+    })
+  })
+
+  test('Should allow multiple filters', function () {
+    const SomeObject = function () {
+      this.type = 'secondtype'
+      this.value = 'xxx'
+    }
+
+    var filters = [
+      {
+        test: function (key, value) { return value.type === 'firsttype' }
+      },
+      {
+        test: function (key, value) { return value.type === 'secondtype' }
+      }
+    ]
+
+    var options = { filters: filters }
+    var object = new SomeObject()
+
+    assert.deepEqual(flatten({
+      group1: {
+        object: object
+      }
+    }, options), {
+      'group1.object': object
+    })
+  })
+
+  test('If filter tests do not pass, object is not filtered', function () {
+    const SomeObject = function () {
+      this.type = 'sometype'
+      this.value = 'xxx'
+    }
+
+    var filters = [{
+      test: function (key, value) { return value.type === 'othertype' }
+    }]
+
+    var options = { filters: filters }
+    var object = new SomeObject()
+
+    assert.deepEqual(flatten({
+      group1: {
+        object: object
+      }
+    }, options), {
+      'group1.object.type': 'sometype',
+      'group1.object.value': 'xxx'
     })
   })
 })
