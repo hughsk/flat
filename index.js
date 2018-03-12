@@ -10,9 +10,10 @@ function flatten (target, opts) {
   var delimiter = opts.delimiter || '.'
   var maxDepth = opts.maxDepth
   var coercion = opts.coercion
+  var filters = opts.filters
   var output = {}
 
-  function transform (coercion, key, value) {
+  function transform (key, value) {
     if (!coercion) { return value }
     var transformed = value
 
@@ -23,7 +24,19 @@ function flatten (target, opts) {
     return transformed
   }
 
-  function shouldTraverse (value, transformedValue, currentDepth) {
+  function isFiltered (key, value) {
+    if (!filters) { return false }
+
+    var filtered = false
+    filters.forEach(function (filter) {
+      if (filter.test(key, value)) {
+        filtered = true
+      }
+    })
+    return filtered
+  }
+
+  function shouldTraverse (value, transformedValue, currentDepth, filters) {
     var type = Object.prototype.toString.call(value)
     var isarray = opts.safe && Array.isArray(value)
     var isbuffer = isBuffer(value)
@@ -49,9 +62,9 @@ function flatten (target, opts) {
         ? prev + delimiter + key
         : key
 
-      const transformedValue = transform(coercion, key, value)
+      const transformedValue = transform(key, value)
 
-      if (shouldTraverse(value, transformedValue, currentDepth)) {
+      if (shouldTraverse(value, transformedValue, currentDepth) && !isFiltered(key, value)) {
         return step(value, newKey, currentDepth + 1)
       }
 

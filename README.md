@@ -188,3 +188,34 @@ flatten({
 //    'group1.prop1': 'aaabbbcccdddeee'
 // }
 ```
+
+
+### filtering
+
+Optionally run a test/set of tests on your incoming key/value(s) and don't transform this key's children if it matches.
+
+```javascript
+
+const someObject = {
+    prop1: 'abc',
+    prop2: 'def'
+}
+
+var filters = [{
+    test: function (key, value) { return value.prop1 === 'abc' }
+}]
+var options = { filters: filters }
+
+flatten({
+    group1: {
+        someObject: someObject
+    }
+}, options)
+
+// {
+//    'group1.someObject': {
+//      'prop1': 'abc',
+//      'prop2': 'def'
+//    }
+// }
+```
