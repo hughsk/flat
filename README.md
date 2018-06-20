@@ -158,3 +158,30 @@ flatten({
 //   'key3.a': { b: { c: 2 } }
 // }
 ```
+
+## Command Line Usage
+
+`flat` is also available as a command line tool. You can run it with 
+[`npx`](https://ghub.io/npx):
+
+```sh
+npx flat foo.json
+```
+
+Or install the `flat` command globally:
+ 
+```sh
+npm i -g flat && flat foo.json
+```
+
+Accepts a filename as an argument:
+
+```sh
+flat foo.json
+```
+
+Also accepts JSON on stdin:
+
+```sh
+cat foo.json | flat
+```
