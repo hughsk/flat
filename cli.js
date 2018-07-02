@@ -2,11 +2,12 @@
 
 const flat = require('.')
 const fs = require('fs')
+const path = require('path')
 const readline = require('readline')
 
 if (process.stdin.isTTY) {
   // Read from file
-  const file = process.argv.slice(2)[0]
+  const file = path.resolve(process.cwd(), process.argv.slice(2)[0])
   if (!file) usage()
   if (!fs.existsSync(file)) usage()
   out(require(file))
