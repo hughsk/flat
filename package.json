@@ -2,6 +2,7 @@
   "name": "flat",
   "version": "4.0.0",
   "main": "index.js",
+  "bin": "cli.js",
   "scripts": {
     "test": "mocha -u tdd --reporter spec && standard index.js test/index.js"
   },
