@@ -23,9 +23,12 @@ function flatten (target, opts) {
         type === '[object Array]'
       )
 
-      var newKey = prev
-        ? prev + delimiter + key
-        : key
+      var newKey
+      if (delimiter instanceof Function) {
+        newKey = prev ? prev + delimiter(key) : key
+      } else {
+        newKey = prev ? prev + delimiter + key : key
+      }
 
       if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
         (!opts.maxDepth || currentDepth < maxDepth)) {
@@ -71,7 +74,7 @@ function unflatten (target, opts) {
   })
 
   sortedKeys.forEach(function (key) {
-    var split = key.split(delimiter)
+    var split = delimiter instanceof Function ? delimiter(key) : key.split(delimiter)
     var key1 = getkey(split.shift())
     var key2 = getkey(split[0])
     var recipient = result
