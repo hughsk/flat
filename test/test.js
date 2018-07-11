@@ -105,6 +105,40 @@ suite('Flatten', function () {
     })
   })
 
+  test('Callback Delimiter', function() {
+    assert.deepEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, {
+      delimiter: function(key, prev){
+         return prev ? prev + ':' + key : key
+      }
+    }), {
+      'hello:world:again': 'good morning'
+    })
+  })
+
+  test('Delimiter for url query', function() {
+    assert.deepEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning',
+          never: 'give up'
+        }
+      }
+    }, {
+      delimiter: function(key, prev){
+        return prev ? prev + "[" + key + "]" : key
+      }
+    }), {
+      'hello[world][again]': 'good morning',
+      'hello[world][never]': 'give up'
+    })
+  })
+
   test('Empty Objects', function () {
     assert.deepEqual(flatten({
       hello: {
@@ -254,6 +288,40 @@ suite('Unflatten', function () {
       'hello world again': 'good morning'
     }, {
       delimiter: ' '
+    }))
+  })
+
+  test('Callback Delimiter', function() {
+    assert.deepEqual({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, unflatten({
+      'hello:world:again': 'good morning'
+    }, {
+      delimiter: function(key){
+        return key.split(':')
+      }
+    }))
+  })
+
+  test('Delimiter for url query', function() {
+    assert.deepEqual({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      }
+    }, unflatten({
+      'hello[world][again]': 'good morning'
+    }, {
+      delimiter: function(key){
+        var steps = key.split(/(?:]\[)|\[|]$/)
+        steps.pop() // last empty string
+        return steps
+      }
     }))
   })
 
@@ -511,3 +579,4 @@ suite('Arrays', function () {
     })
   })
 })
+
