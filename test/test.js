@@ -125,7 +125,8 @@ suite('Flatten', function () {
     assert.deepEqual(flatten({
       hello: {
         world: {
-          again: 'good morning'
+          again: 'good morning',
+          never: 'give up'
         }
       }
     }, {
@@ -133,7 +134,8 @@ suite('Flatten', function () {
         return prev ? prev + "[" + key + "]" : key
       }
     }), {
-      'hello[world][again]': 'good morning'
+      'hello[world][again]': 'good morning',
+      'hello[world][never]': 'give up'
     })
   })
 

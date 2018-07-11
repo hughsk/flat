@@ -66,6 +66,29 @@ unflatten({
 
 Use a custom delimiter for (un)flattening your objects, instead of `.`.
 
+For total control over the key use a callback function as a delimiter.
+
+``` javascript
+
+/**
+ * @param {string} key - a property of an iterated object
+ * @param {string|undefined} prev - the string accumulating all the properties. Undefined for the first object
+ * @return {string}
+ */
+function delimiter(key, prev){
+  return prev ? prev + "[" + key + "]" : key
+}
+flatten({
+    hello: {
+      world: {
+        again: 'good morning'
+      }
+    }
+}, {
+  delimiter: delimiter
+}) //  resulting {'hello[world][again]': 'good morning'}
+```
+
 ### safe
 
 When enabled, both `flat` and `unflatten` will preserve arrays and their
