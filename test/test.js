@@ -113,8 +113,8 @@ suite('Flatten', function () {
         }
       }
     }, {
-      delimiter: function(key){
-        return ":" + key
+      delimiter: function(key, prev){
+         return prev ? prev + ':' + key : key
       }
     }), {
       'hello:world:again': 'good morning'
@@ -129,8 +129,8 @@ suite('Flatten', function () {
         }
       }
     }, {
-      delimiter: function(key){
-        return "[" + key + "]"
+      delimiter: function(key, prev){
+        return prev ? prev + "[" + key + "]" : key
       }
     }), {
       'hello[world][again]': 'good morning'

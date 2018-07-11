@@ -25,7 +25,7 @@ function flatten (target, opts) {
 
       var newKey
       if (delimiter instanceof Function) {
-        newKey = prev ? prev + delimiter(key) : key
+        newKey = delimiter(key, prev)
       } else {
         newKey = prev ? prev + delimiter + key : key
       }
