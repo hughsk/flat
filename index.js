@@ -1,4 +1,6 @@
-var isBuffer = require('is-buffer')
+function isBuffer(val) {
+  return ![, null].includes(val) && val.constructor === Buffer;
+}
 
 module.exports = flatten
 flatten.flatten = flatten
