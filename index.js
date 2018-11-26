@@ -32,6 +32,14 @@ function flatten (target, opts) {
         return step(value, newKey, currentDepth + 1)
       }
 
+      if (opts.keyInterceptor) {
+        newKey = opts.keyInterceptor(newKey)
+      }
+
+      if (opts.valueInterceptor) {
+        value = opts.valueInterceptor(value)
+      }
+
       output[newKey] = value
     })
   }

@@ -159,9 +159,25 @@ flatten({
 // }
 ```
 
+### Key interceptor for flatten
+
+Give the possibility to manipulate the key (Ex: Translate)
+
+``` javascript
+var flatten = require('flat')
+var data = { name: 'Rodolfo', age: 29 };
+
+flatten(data, { maxDepth: 2, keyInterceptor: key => I18n.t(`myModule.${key}`) })
+
+// {
+//   'Nome completo': 'Rodolfo',
+//   'Idade': 29
+// }
+```
+
 ## Command Line Usage
 
-`flat` is also available as a command line tool. You can run it with 
+`flat` is also available as a command line tool. You can run it with
 [`npx`](https://ghub.io/npx):
 
 ```sh
@@ -169,7 +185,7 @@ npx flat foo.json
 ```
 
 Or install the `flat` command globally:
- 
+
 ```sh
 npm i -g flat && flat foo.json
 ```
