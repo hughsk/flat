@@ -510,4 +510,46 @@ suite('Arrays', function () {
       }
     })
   })
+
+  test('Should be translate the keys', function () {
+    var originalData = {
+      name: 'Rodolfo', age: 27
+    };
+
+    var expectedData = {
+      'Nome': 'Rodolfo',
+      'Idade': 27
+    };
+
+    var translates = {
+      name: 'Nome',
+      age: 'Idade'
+    };
+
+    var options = {
+      keyInterceptor: function(key) {
+        return translates[key];
+      }
+    }
+
+    assert.deepEqual(flatten(originalData, options), expectedData);
+  })
+
+  test('Should be sum the value', function () {
+    var originalData = {
+      name: 'Rodolfo', age: 20
+    };
+
+    var expectedData = {
+      name: 'Rodolfo', age: 50
+    };
+
+    var options = {
+      valueInterceptor: function(key, value) {
+        return key === 'age' ? value + 30 : value
+      }
+    }
+
+    assert.deepEqual(flatten(originalData, options), expectedData);
+  })
 })
