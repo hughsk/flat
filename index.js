@@ -37,7 +37,7 @@ function flatten (target, opts) {
       }
 
       if (opts.valueInterceptor) {
-        value = opts.valueInterceptor(value)
+        value = opts.valueInterceptor(newKey, value)
       }
 
       output[newKey] = value
