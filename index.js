@@ -23,9 +23,19 @@ function flatten (target, opts) {
         type === '[object Array]'
       )
 
-      var newKey = prev
-        ? prev + delimiter + key
-        : key
+      var newKey = key
+
+      if (opts.keyInterceptor) {
+        newKey = opts.keyInterceptor(newKey)
+      }
+
+      if (opts.valueInterceptor) {
+        value = opts.valueInterceptor(newKey, value)
+      }
+
+      newKey = prev
+        ? prev + delimiter + newKey
+        : newKey
 
       if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
         (!opts.maxDepth || currentDepth < maxDepth)) {
