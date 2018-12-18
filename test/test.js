@@ -180,6 +180,46 @@ suite('Flatten', function () {
       'hello.0500': 'darkness my old friend'
     })
   })
+
+  suite('.safe', function () {
+    test('Should not protect arrays when false', function () {
+      assert.deepEqual(flatten({
+        hello: [
+          { world: { again: 'foo' } },
+          { lorem: 'ipsum' }
+        ]
+      }, {
+        safe: false
+      }), {
+        'hello.0.world.again': 'foo',
+        'hello.1.lorem': 'ipsum'
+      })
+    })
+
+    test('Should protect arrays when true', function () {
+      assert.deepEqual(flatten({
+        hello: [
+          { world: { again: 'foo' } },
+          { lorem: 'ipsum' }
+        ],
+        another: {
+          nested: [{ array: { too: 'deep' } }]
+        },
+        lorem: {
+          ipsum: 'whoop'
+        }
+      }, {
+        safe: true
+      }), {
+        hello: [
+          { world: { again: 'foo' } },
+          { lorem: 'ipsum' }
+        ],
+        'lorem.ipsum': 'whoop',
+        'another.nested': [{ array: { too: 'deep' } }]
+      })
+    })
+  })
 })
 
 suite('Unflatten', function () {
@@ -323,46 +363,6 @@ suite('Unflatten', function () {
       assert.deepEqual(flat.unflatten({ a: 0, 'a.b': 'c' }), { a: 0 })
       assert.deepEqual(flat.unflatten({ a: 1, 'a.b': 'c' }), { a: 1 })
       assert.deepEqual(flat.unflatten({ a: '', 'a.b': 'c' }), { a: '' })
-    })
-  })
-
-  suite('.safe', function () {
-    test('Should protect arrays when true', function () {
-      assert.deepEqual(flatten({
-        hello: [
-            { world: { again: 'foo' } },
-           { lorem: 'ipsum' }
-        ],
-        another: {
-          nested: [{ array: { too: 'deep' } }]
-        },
-        lorem: {
-          ipsum: 'whoop'
-        }
-      }, {
-        safe: true
-      }), {
-        hello: [
-            { world: { again: 'foo' } },
-           { lorem: 'ipsum' }
-        ],
-        'lorem.ipsum': 'whoop',
-        'another.nested': [{ array: { too: 'deep' } }]
-      })
-    })
-
-    test('Should not protect arrays when false', function () {
-      assert.deepEqual(flatten({
-        hello: [
-            { world: { again: 'foo' } },
-           { lorem: 'ipsum' }
-        ]
-      }, {
-        safe: false
-      }), {
-        'hello.0.world.again': 'foo',
-        'hello.1.lorem': 'ipsum'
-      })
     })
   })
 
