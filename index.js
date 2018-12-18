@@ -49,7 +49,11 @@ function unflatten (target, opts) {
   var result = {}
 
   var isbuffer = isBuffer(target)
-  if (isbuffer || Object.prototype.toString.call(target) !== '[object Object]') {
+  if (Array.isArray(target)) {
+    return target.map(function (item) {
+      return unflatten(item, opts)
+    })
+  } else if (isbuffer || Object.prototype.toString.call(target) !== '[object Object]') {
     return target
   }
 
