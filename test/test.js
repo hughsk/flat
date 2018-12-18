@@ -366,6 +366,22 @@ suite('Unflatten', function () {
     })
   })
 
+  suite('.safe', function () {
+    test('Should unflatten dot notation keys nested in array', function () {
+      assert.deepEqual(unflatten({
+        hello: [
+          { 'something.nested': true }
+        ]
+      }, {
+        safe: false
+      }), {
+        hello: [
+          { something: { nested: true } }
+        ]
+      })
+    })
+  })
+
   suite('.object', function () {
     test('Should create object instead of array when true', function () {
       var unflattened = unflatten({
