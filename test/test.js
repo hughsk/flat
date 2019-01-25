@@ -180,6 +180,46 @@ suite('Flatten', function () {
       'hello.0500': 'darkness my old friend'
     })
   })
+
+  suite('.safe', function () {
+    test('Should not protect arrays when false', function () {
+      assert.deepEqual(flatten({
+        hello: [
+          { world: { again: 'foo' } },
+          { lorem: 'ipsum' }
+        ]
+      }, {
+        safe: false
+      }), {
+        'hello.0.world.again': 'foo',
+        'hello.1.lorem': 'ipsum'
+      })
+    })
+
+    test('Should protect arrays when true', function () {
+      assert.deepEqual(flatten({
+        hello: [
+          { world: { again: 'foo' } },
+          { lorem: 'ipsum' }
+        ],
+        another: {
+          nested: [{ array: { too: 'deep' } }]
+        },
+        lorem: {
+          ipsum: 'whoop'
+        }
+      }, {
+        safe: true
+      }), {
+        hello: [
+          { world: { again: 'foo' } },
+          { lorem: 'ipsum' }
+        ],
+        'lorem.ipsum': 'whoop',
+        'another.nested': [{ array: { too: 'deep' } }]
+      })
+    })
+  })
 })
 
 suite('Unflatten', function () {
@@ -327,41 +367,17 @@ suite('Unflatten', function () {
   })
 
   suite('.safe', function () {
-    test('Should protect arrays when true', function () {
-      assert.deepEqual(flatten({
+    test('Should unflatten dot notation keys nested in array', function () {
+      assert.deepEqual(unflatten({
         hello: [
-            { world: { again: 'foo' } },
-           { lorem: 'ipsum' }
-        ],
-        another: {
-          nested: [{ array: { too: 'deep' } }]
-        },
-        lorem: {
-          ipsum: 'whoop'
-        }
-      }, {
-        safe: true
-      }), {
-        hello: [
-            { world: { again: 'foo' } },
-           { lorem: 'ipsum' }
-        ],
-        'lorem.ipsum': 'whoop',
-        'another.nested': [{ array: { too: 'deep' } }]
-      })
-    })
-
-    test('Should not protect arrays when false', function () {
-      assert.deepEqual(flatten({
-        hello: [
-            { world: { again: 'foo' } },
-           { lorem: 'ipsum' }
+          { 'something.nested': true }
         ]
       }, {
         safe: false
       }), {
-        'hello.0.world.again': 'foo',
-        'hello.1.lorem': 'ipsum'
+        hello: [
+          { something: { nested: true } }
+        ]
       })
     })
   })

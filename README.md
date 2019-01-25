@@ -68,8 +68,7 @@ Use a custom delimiter for (un)flattening your objects, instead of `.`.
 
 ### safe
 
-When enabled, both `flat` and `unflatten` will preserve arrays and their
-contents. This is disabled by default.
+When enabled `flatten` will preserve arrays and their contents. This is disabled by default.
 
 ``` javascript
 var flatten = require('flat')
