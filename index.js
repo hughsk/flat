@@ -66,9 +66,7 @@ function unflatten (target, opts) {
       : parsedKey
   }
 
-  var sortedKeys = Object.keys(target).sort(function (keyA, keyB) {
-    return keyA.length - keyB.length
-  })
+  var sortedKeys = Object.keys(target).sort();
 
   sortedKeys.forEach(function (key) {
     var split = key.split(delimiter)
