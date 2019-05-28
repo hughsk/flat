@@ -364,6 +364,13 @@ suite('Unflatten', function () {
         'hello.1.lorem': 'ipsum'
       })
     })
+
+    test('Empty objects should not be removed', function () {
+      assert.deepEqual(unflatten({
+        foo: [],
+        bar: {}
+      }), {foo: [], bar: {}})
+    })
   })
 
   suite('.object', function () {
