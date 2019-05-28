@@ -95,7 +95,6 @@ function unflatten (target, opts) {
       result[key] = target[key]
       return result
     } else {
-      console.log(target[key])
       return addKeys(
         key,
         result,
