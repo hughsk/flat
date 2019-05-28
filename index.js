@@ -66,11 +66,30 @@ function unflatten (target, opts) {
       : parsedKey
   }
 
-  var sortedKeys = Object.keys(target).sort(function (keyA, keyB) {
-    return keyA.length - keyB.length
-  })
+  function addKeys (keyPrefix, recipient, target) {
+    return Object.keys(target).reduce(function (result, key) {
+      result[keyPrefix + delimiter + key] = target[key]
 
-  sortedKeys.forEach(function (key) {
+      return result
+    }, recipient)
+  }
+
+  target = Object.keys(target).reduce((result, key) => {
+    var type = Object.prototype.toString.call(target[key])
+    var isObject = (type === '[object Object]' || type === '[object Array]')
+    if (isObject) {
+      return addKeys(
+        key,
+        result,
+        flatten(target[key], opts)
+      )
+    } else {
+      result[key] = target[key]
+      return result
+    }
+  }, {})
+
+  Object.keys(target).forEach(function (key) {
     var split = key.split(delimiter)
     var key1 = getkey(split.shift())
     var key2 = getkey(split[0])

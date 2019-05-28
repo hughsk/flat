@@ -511,3 +511,26 @@ suite('Arrays', function () {
     })
   })
 })
+
+suite('Order of Keys', function () {
+  test('Order of keys should not be changed after round trip flatten/unflatten', function () {
+    var obj = {
+      'b': 1,
+      'abc': {
+        'c': [{
+          'd': 1,
+          'bca': 1, 
+          'a': 1
+        }]
+      },
+      'a': 1
+    }
+    var result = unflatten(
+      flatten(obj)
+    )
+
+    assert.deepEqual(Object.keys(obj), Object.keys(result))
+    assert.deepEqual(Object.keys(obj.abc), Object.keys(result.abc))
+    assert.deepEqual(Object.keys(obj.abc.c[0]), Object.keys(result.abc.c[0]))
+  })
+})
