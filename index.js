@@ -74,18 +74,33 @@ function unflatten (target, opts) {
     }, recipient)
   }
 
+  function isEmpty (val) {
+    var type = Object.prototype.toString.call(val)
+    var isArray = type === '[object Array]'
+    var isObject = type === '[object Object]'
+
+    if (!val) {
+      return true
+    } else if (isArray) {
+      return !val.length
+    } else if (isObject) {
+      return !Object.keys(val).length
+    }
+  }
+
   target = Object.keys(target).reduce((result, key) => {
     var type = Object.prototype.toString.call(target[key])
     var isObject = (type === '[object Object]' || type === '[object Array]')
-    if (isObject) {
+    if (!isObject || isEmpty(target[key])) {
+      result[key] = target[key]
+      return result
+    } else {
+      console.log(target[key])
       return addKeys(
         key,
         result,
         flatten(target[key], opts)
       )
-    } else {
-      result[key] = target[key]
-      return result
     }
   }, {})
 
