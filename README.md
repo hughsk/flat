@@ -122,7 +122,7 @@ When enabled, existing keys in the unflattened object may be overwritten if they
 ```javascript
 unflatten({
     'TRAVIS': 'true',
-    'TRAVIS_DIR': '/home/travis/build/kvz/environmental'
+    'TRAVIS.DIR': '/home/travis/build/kvz/environmental'
 }, { overwrite: true })
 
 // TRAVIS: {
