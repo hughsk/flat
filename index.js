@@ -4,11 +4,16 @@ module.exports = flatten
 flatten.flatten = flatten
 flatten.unflatten = unflatten
 
+function keyIdentity (key) {
+  return key
+}
+
 function flatten (target, opts) {
   opts = opts || {}
 
   var delimiter = opts.delimiter || '.'
   var maxDepth = opts.maxDepth
+  var transformKey = opts.transformKey || keyIdentity
   var output = {}
 
   function step (object, prev, currentDepth) {
@@ -24,8 +29,8 @@ function flatten (target, opts) {
       )
 
       var newKey = prev
-        ? prev + delimiter + key
-        : key
+        ? prev + delimiter + transformKey(key)
+        : transformKey(key)
 
       if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
         (!opts.maxDepth || currentDepth < maxDepth)) {
@@ -46,6 +51,7 @@ function unflatten (target, opts) {
 
   var delimiter = opts.delimiter || '.'
   var overwrite = opts.overwrite || false
+  var transformKey = opts.transformKey || keyIdentity
   var result = {}
 
   var isbuffer = isBuffer(target)
@@ -71,7 +77,7 @@ function unflatten (target, opts) {
   })
 
   sortedKeys.forEach(function (key) {
-    var split = key.split(delimiter)
+    var split = key.split(delimiter).map(transformKey)
     var key1 = getkey(split.shift())
     var key2 = getkey(split[0])
     var recipient = result
