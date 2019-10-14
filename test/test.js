@@ -109,11 +109,11 @@ suite('Flatten', function () {
     assert.deepEqual(flatten({
       hello: {
         empty: {
-          nested: { }
+          nested: {}
         }
       }
     }), {
-      'hello.empty.nested': { }
+      'hello.empty.nested': {}
     })
   })
 
@@ -166,6 +166,28 @@ suite('Flatten', function () {
       'lorem.ipsum': {
         dolor: 'good evening'
       }
+    })
+  })
+
+  test('Transformed Keys', function () {
+    assert.deepEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      },
+      lorem: {
+        ipsum: {
+          dolor: 'good evening'
+        }
+      }
+    }, {
+      transformKey: function (key) {
+        return '__' + key + '__'
+      }
+    }), {
+      '__hello__.__world__.__again__': 'good morning',
+      '__lorem__.__ipsum__.__dolor__': 'good evening'
     })
   })
 
@@ -225,14 +247,14 @@ suite('Unflatten', function () {
       'hello.lorem.dolor': 'sit',
       'world.lorem.ipsum': 'again',
       'world.lorem.dolor': 'sit',
-      'world': {greet: 'hello'}
+      'world': { greet: 'hello' }
     }))
   })
 
   test('nested objects do not clobber each other when a.b inserted before a', function () {
     var x = {}
-    x['foo.bar'] = {t: 123}
-    x['foo'] = {p: 333}
+    x['foo.bar'] = { t: 123 }
+    x['foo'] = { p: 333 }
     assert.deepEqual(unflatten(x), {
       foo: {
         bar: {
@@ -273,6 +295,28 @@ suite('Unflatten', function () {
     }))
   })
 
+  test('Transformed Keys', function () {
+    assert.deepEqual(unflatten({
+      '__hello__.__world__.__again__': 'good morning',
+      '__lorem__.__ipsum__.__dolor__': 'good evening'
+    }, {
+      transformKey: function (key) {
+        return key.substring(2, key.length - 2)
+      }
+    }), {
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      },
+      lorem: {
+        ipsum: {
+          dolor: 'good evening'
+        }
+      }
+    })
+  })
+
   test('Messy', function () {
     assert.deepEqual({
       hello: { world: 'again' },
@@ -280,11 +324,17 @@ suite('Unflatten', function () {
       good: {
         morning: {
           hash: {
-            key: { nested: {
-              deep: { and: { even: {
-                deeper: { still: 'hello' }
-              } } }
-            } }
+            key: {
+              nested: {
+                deep: {
+                  and: {
+                    even: {
+                      deeper: { still: 'hello' }
+                    }
+                  }
+                }
+              }
+            }
           },
           again: { testing: { 'this': 'out' } }
         }
@@ -307,15 +357,15 @@ suite('Unflatten', function () {
 
   suite('Overwrite + non-object values in key positions', function () {
     test('non-object keys + overwrite should be overwritten', function () {
-      assert.deepEqual(flat.unflatten({ a: null, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
-      assert.deepEqual(flat.unflatten({ a: 0, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
-      assert.deepEqual(flat.unflatten({ a: 1, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
-      assert.deepEqual(flat.unflatten({ a: '', 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
+      assert.deepEqual(flat.unflatten({ a: null, 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
+      assert.deepEqual(flat.unflatten({ a: 0, 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
+      assert.deepEqual(flat.unflatten({ a: 1, 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
+      assert.deepEqual(flat.unflatten({ a: '', 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
     })
 
     test('overwrite value should not affect undefined keys', function () {
-      assert.deepEqual(flat.unflatten({ a: undefined, 'a.b': 'c' }, {overwrite: true}), { a: { b: 'c' } })
-      assert.deepEqual(flat.unflatten({ a: undefined, 'a.b': 'c' }, {overwrite: false}), { a: { b: 'c' } })
+      assert.deepEqual(flat.unflatten({ a: undefined, 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
+      assert.deepEqual(flat.unflatten({ a: undefined, 'a.b': 'c' }, { overwrite: false }), { a: { b: 'c' } })
     })
 
     test('if no overwrite, should ignore nested values under non-object key', function () {
@@ -330,8 +380,8 @@ suite('Unflatten', function () {
     test('Should protect arrays when true', function () {
       assert.deepEqual(flatten({
         hello: [
-            { world: { again: 'foo' } },
-           { lorem: 'ipsum' }
+          { world: { again: 'foo' } },
+          { lorem: 'ipsum' }
         ],
         another: {
           nested: [{ array: { too: 'deep' } }]
@@ -343,8 +393,8 @@ suite('Unflatten', function () {
         safe: true
       }), {
         hello: [
-            { world: { again: 'foo' } },
-           { lorem: 'ipsum' }
+          { world: { again: 'foo' } },
+          { lorem: 'ipsum' }
         ],
         'lorem.ipsum': 'whoop',
         'another.nested': [{ array: { too: 'deep' } }]
@@ -354,8 +404,8 @@ suite('Unflatten', function () {
     test('Should not protect arrays when false', function () {
       assert.deepEqual(flatten({
         hello: [
-            { world: { again: 'foo' } },
-           { lorem: 'ipsum' }
+          { world: { again: 'foo' } },
+          { lorem: 'ipsum' }
         ]
       }, {
         safe: false
@@ -493,7 +543,7 @@ suite('Arrays', function () {
 
   test('Array typed objects should be restored by unflatten', function () {
     assert.equal(
-        Object.prototype.toString.call(['foo', 'bar'])
+      Object.prototype.toString.call(['foo', 'bar'])
       , Object.prototype.toString.call(unflatten({
         'a.0': 'foo',
         'a.1': 'bar'

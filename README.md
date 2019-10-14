@@ -159,6 +159,55 @@ flatten({
 // }
 ```
 
+### transformKey
+
+Transform each part of a flat key before and after flattening.
+
+```javascript
+var flatten = require('flat')
+var unflatten = require('flat').unflatten
+
+flatten({
+    key1: {
+        keyA: 'valueI'
+    },
+    key2: {
+        keyB: 'valueII'
+    },
+    key3: { a: { b: { c: 2 } } }
+}, {
+    transformKey: function(key){
+      return '__' + key + '__';
+    }
+})
+
+// {
+//   '__key1__.__keyA__': 'valueI',
+//   '__key2__.__keyB__': 'valueII',
+//   '__key3__.__a__.__b__.__c__': 2
+// }
+
+unflatten({
+      '__key1__.__keyA__': 'valueI',
+      '__key2__.__keyB__': 'valueII',
+      '__key3__.__a__.__b__.__c__': 2
+}, {
+    transformKey: function(key){
+      return key.substring(2, key.length - 2)
+    }
+})
+
+// {
+//     key1: {
+//         keyA: 'valueI'
+//     },
+//     key2: {
+//         keyB: 'valueII'
+//     },
+//     key3: { a: { b: { c: 2 } } }
+// }
+```
+
 ## Command Line Usage
 
 `flat` is also available as a command line tool. You can run it with 
