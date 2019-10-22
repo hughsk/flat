@@ -2,6 +2,8 @@
 
 const assert = require('assert')
 const path = require('path')
+const { exec } = require('child_process')
+const pkg = require('../package.json')
 const flat = require('../index')
 
 const flatten = flat.flatten
@@ -591,5 +593,37 @@ suite('Order of Keys', function () {
     assert.deepStrictEqual(Object.keys(obj), Object.keys(result))
     assert.deepStrictEqual(Object.keys(obj.abc), Object.keys(result.abc))
     assert.deepStrictEqual(Object.keys(obj.abc.c[0]), Object.keys(result.abc.c[0]))
+  })
+})
+
+suite('CLI', function () {
+  test('can take filename', function (done) {
+    const cli = path.resolve(__dirname, '..', pkg.bin)
+    const pkgJSON = path.resolve(__dirname, '..', 'package.json')
+    exec(`${cli} ${pkgJSON}`, (err, stdout, stderr) => {
+      assert.ifError(err)
+      assert.strictEqual(stdout.trim(), JSON.stringify(flatten(pkg), null, 2))
+      done()
+    })
+  })
+
+  test('exits with usage if no file', function (done) {
+    const cli = path.resolve(__dirname, '..', pkg.bin)
+    const pkgJSON = path.resolve(__dirname, '..', 'package.json')
+    exec(`${cli} ${pkgJSON}`, (err, stdout, stderr) => {
+      assert.ifError(err)
+      assert.strictEqual(stdout.trim(), JSON.stringify(flatten(pkg), null, 2))
+      done()
+    })
+  })
+
+  test('can take piped file', function (done) {
+    const cli = path.resolve(__dirname, '..', pkg.bin)
+    const pkgJSON = path.resolve(__dirname, '..', 'package.json')
+    exec(`cat ${pkgJSON} | ${cli}`, (err, stdout, stderr) => {
+      assert.ifError(err)
+      assert.strictEqual(stdout.trim(), JSON.stringify(flatten(pkg), null, 2))
+      done()
+    })
   })
 })

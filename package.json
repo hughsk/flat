@@ -4,7 +4,7 @@
   "main": "index.js",
   "bin": "cli.js",
   "scripts": {
-    "test": "mocha -u tdd --reporter spec && standard index.js test/index.js"
+    "test": "mocha -u tdd --reporter spec && standard cli.js index.js test/index.js"
   },
   "license": "BSD-3-Clause",
   "description": "Take a nested Javascript object and flatten it, or unflatten an object with delimited keys",
