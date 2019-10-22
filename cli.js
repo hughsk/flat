@@ -38,5 +38,5 @@ flat foo.json
 cat foo.json | flat
 `)
 
-  process.exit()
+  process.exit(1)
 }
