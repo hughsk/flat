@@ -1,11 +1,13 @@
 /* globals suite test */
 
-var assert = require('assert')
-var flat = require('../index')
-var flatten = flat.flatten
-var unflatten = flat.unflatten
+const assert = require('assert')
+const path = require('path')
+const flat = require('../index')
 
-var primitives = {
+const flatten = flat.flatten
+const unflatten = flat.unflatten
+
+const primitives = {
   String: 'good morning',
   Number: 1234.99,
   Boolean: true,
@@ -16,7 +18,7 @@ var primitives = {
 
 suite('Flatten Primitives', function () {
   Object.keys(primitives).forEach(function (key) {
-    var value = primitives[key]
+    const value = primitives[key]
 
     test(key, function () {
       assert.deepStrictEqual(flatten({
@@ -32,7 +34,7 @@ suite('Flatten Primitives', function () {
 
 suite('Unflatten Primitives', function () {
   Object.keys(primitives).forEach(function (key) {
-    var value = primitives[key]
+    const value = primitives[key]
 
     test(key, function () {
       assert.deepStrictEqual(unflatten({
@@ -252,7 +254,7 @@ suite('Unflatten', function () {
   })
 
   test('nested objects do not clobber each other when a.b inserted before a', function () {
-    var x = {}
+    const x = {}
     x['foo.bar'] = { t: 123 }
     x.foo = { p: 333 }
     assert.deepStrictEqual(unflatten(x), {
@@ -425,7 +427,7 @@ suite('Unflatten', function () {
 
   suite('.object', function () {
     test('Should create object instead of array when true', function () {
-      var unflattened = unflatten({
+      const unflattened = unflatten({
         'hello.you.0': 'ipsum',
         'hello.you.1': 'lorem',
         'hello.other.world': 'foo'
@@ -445,7 +447,7 @@ suite('Unflatten', function () {
     })
 
     test('Should create object instead of array when nested', function () {
-      var unflattened = unflatten({
+      const unflattened = unflatten({
         hello: {
           'you.0': 'ipsum',
           'you.1': 'lorem',
@@ -467,7 +469,7 @@ suite('Unflatten', function () {
     })
 
     test('Should keep the zero in the left when object is true', function () {
-      var unflattened = unflatten({
+      const unflattened = unflatten({
         'hello.0200': 'world',
         'hello.0500': 'darkness my old friend'
       }, {
@@ -483,7 +485,7 @@ suite('Unflatten', function () {
     })
 
     test('Should not create object when false', function () {
-      var unflattened = unflatten({
+      const unflattened = unflatten({
         'hello.you.0': 'ipsum',
         'hello.you.1': 'lorem',
         'hello.other.world': 'foo'
@@ -571,7 +573,7 @@ suite('Arrays', function () {
 
 suite('Order of Keys', function () {
   test('Order of keys should not be changed after round trip flatten/unflatten', function () {
-    var obj = {
+    const obj = {
       b: 1,
       abc: {
         c: [{
@@ -582,7 +584,7 @@ suite('Order of Keys', function () {
       },
       a: 1
     }
-    var result = unflatten(
+    const result = unflatten(
       flatten(obj)
     )
 
