@@ -11,8 +11,8 @@ if (process.stdin.isTTY) {
   if (!filepath) return usage()
   // Read from file
   const file = path.resolve(process.cwd(), filepath)
-  if (!file) return usage()
-  if (!fs.existsSync(file)) return usage()
+  if (!file) return usage(1)
+  if (!fs.existsSync(file)) return usage(1)
   out(require(file))
 } else {
   // Read from newline-delimited STDIN
@@ -30,7 +30,7 @@ function out (data) {
   process.stdout.write(JSON.stringify(flat(data), null, 2))
 }
 
-function usage () {
+function usage (code) {
   console.log(`
 Usage:
 
@@ -38,5 +38,5 @@ flat foo.json
 cat foo.json | flat
 `)
 
-  process.exit(1)
+  process.exit(code || 0)
 }
