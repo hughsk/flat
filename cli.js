@@ -1,15 +1,18 @@
 #!/usr/bin/env node
 
-const flat = require('.')
 const fs = require('fs')
 const path = require('path')
 const readline = require('readline')
 
+const flat = require('./index')
+
 if (process.stdin.isTTY) {
+  const filepath = process.argv.slice(2)[0]
+  if (!filepath) return usage()
   // Read from file
-  const file = path.resolve(process.cwd(), process.argv.slice(2)[0])
-  if (!file) usage()
-  if (!fs.existsSync(file)) usage()
+  const file = path.resolve(process.cwd(), filepath)
+  if (!file) return usage()
+  if (!fs.existsSync(file)) return usage()
   out(require(file))
 } else {
   // Read from newline-delimited STDIN
