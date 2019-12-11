@@ -208,6 +208,36 @@ unflatten({
 // }
 ```
 
+### ignoreValue
+
+Ignore specific values from flattening.
+
+```javascript
+var flatten = require('flat')
+var unflatten = require('flat').unflatten
+
+flatten({
+    key1: {
+        keyA: 'valueI'
+    },
+    key2: {
+        keyB: 'valueII'
+    },
+    key3: { a: { b: { c: 2 } } }
+}, {
+    ignoreValue: function(value){
+      return !!value.c;
+    }
+})
+
+// {
+//   'key1.keyA': 'valueI',
+//   'key2.keyB__': 'valueII',
+//   'key3.a.b': {'c':2},
+// }
+
+```
+
 ## Command Line Usage
 
 `flat` is also available as a command line tool. You can run it with 
