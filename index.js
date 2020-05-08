@@ -1,8 +1,13 @@
-var isBuffer = require('is-buffer')
-
 module.exports = flatten
 flatten.flatten = flatten
 flatten.unflatten = unflatten
+
+function isBuffer (obj) {
+  return obj &&
+    obj.constructor &&
+    (typeof obj.constructor.isBuffer === 'function') &&
+    obj.constructor.isBuffer(obj);
+}
 
 function keyIdentity (key) {
   return key
