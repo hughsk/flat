@@ -6,7 +6,7 @@ function isBuffer (obj) {
   return obj &&
     obj.constructor &&
     (typeof obj.constructor.isBuffer === 'function') &&
-    obj.constructor.isBuffer(obj);
+    obj.constructor.isBuffer(obj)
 }
 
 function keyIdentity (key) {
