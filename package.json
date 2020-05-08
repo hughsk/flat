@@ -15,9 +15,7 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {
-    "is-buffer": "~2.0.4"
-  },
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "git://github.com/hughsk/flat.git"
