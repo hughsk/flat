@@ -99,7 +99,7 @@ function unflatten (target, opts) {
     }
   }
 
-  target = Object.keys(target).reduce((result, key) => {
+  target = Object.keys(target).reduce(function (result, key) {
     const type = Object.prototype.toString.call(target[key])
     const isObject = (type === '[object Object]' || type === '[object Array]')
     if (!isObject || isEmpty(target[key])) {
