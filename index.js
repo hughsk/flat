@@ -14,6 +14,7 @@ function flatten (target, opts) {
   const delimiter = opts.delimiter || '.'
   const maxDepth = opts.maxDepth
   const transformKey = opts.transformKey || keyIdentity
+  const transformFirst = opts.transformFirst || keyIdentity
   const output = {}
 
   function step (object, prev, currentDepth) {
@@ -30,18 +31,18 @@ function flatten (target, opts) {
 
       const newKey = prev
         ? prev + delimiter + transformKey(key)
-        : transformKey(key)
+        : transformFirst(transformKey(key), delimiter)
 
       if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
         (!opts.maxDepth || currentDepth < maxDepth)) {
-        return step(value, newKey, currentDepth + 1)
+        return step(value, newKey, currentDepth + 1, false)
       }
 
       output[newKey] = value
     })
   }
 
-  step(target)
+  step(target, false, 1)
 
   return output
 }
@@ -52,6 +53,7 @@ function unflatten (target, opts) {
   const delimiter = opts.delimiter || '.'
   const overwrite = opts.overwrite || false
   const transformKey = opts.transformKey || keyIdentity
+  const transformFirst = opts.transformFirst || keyIdentity
   const result = {}
 
   const isbuffer = isBuffer(target)
@@ -110,7 +112,7 @@ function unflatten (target, opts) {
   }, {})
 
   Object.keys(target).forEach(function (key) {
-    const split = key.split(delimiter).map(transformKey)
+    const split = transformFirst(key, delimiter).split(delimiter).map(transformKey)
     let key1 = getkey(split.shift())
     let key2 = getkey(split[0])
     let recipient = result

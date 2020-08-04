@@ -195,6 +195,125 @@ suite('Flatten', function () {
     })
   })
 
+  test('Transformed First Key', function () {
+    assert.deepStrictEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      },
+      lorem: {
+        ipsum: {
+          dolor: 'good evening'
+        }
+      }
+    }, {
+      transformFirst: function (key) {
+        return '__' + key + '__'
+      }
+    }), {
+      '__hello__.world.again': 'good morning',
+      '__lorem__.ipsum.dolor': 'good evening'
+    })
+  })
+
+  test('Transformed First Key with Custom Delimiter', function () {
+    assert.deepStrictEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      },
+      lorem: {
+        ipsum: {
+          dolor: 'good evening'
+        }
+      }
+    }, {
+      transformFirst: function (key) {
+        return '__' + key + '__'
+      },
+      delimiter: ':'
+    }), {
+      '__hello__:world:again': 'good morning',
+      '__lorem__:ipsum:dolor': 'good evening'
+    })
+  })
+
+  test('Transformed First Key to Add Prefix with Default Delimiter', function () {
+    assert.deepStrictEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      },
+      lorem: {
+        ipsum: {
+          dolor: 'good evening'
+        }
+      }
+    }, {
+      transformFirst: function (key, delim) {
+        return 'foo' + delim + key
+      }
+    }), {
+      'foo.hello.world.again': 'good morning',
+      'foo.lorem.ipsum.dolor': 'good evening'
+    })
+  })
+
+
+  test('Transformed First Key to Add Prefix with Custom Delimiter', function () {
+    assert.deepStrictEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      },
+      lorem: {
+        ipsum: {
+          dolor: 'good evening'
+        }
+      }
+    }, {
+      transformFirst: function (key, delim) {
+        return 'foo' + delim + key
+      },
+      delimiter: ':'
+    }), {
+      'foo:hello:world:again': 'good morning',
+      'foo:lorem:ipsum:dolor': 'good evening'
+    })
+  })
+
+
+  test('Transformed Results and Keys', function () {
+    assert.deepStrictEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      },
+      lorem: {
+        ipsum: {
+          dolor: 'good evening'
+        }
+      }
+    }, {
+      transformKey: function (key) {
+        return '__' + key + '__'
+      },
+      transformFirst: function (key, delim) {
+        return 'translated' + delim + key
+      }
+    }), {
+      'translated.__hello__.__world__.__again__': 'good morning',
+      'translated.__lorem__.__ipsum__.__dolor__': 'good evening'
+    })
+  })
+
+
+
   test('Should keep number in the left when object', function () {
     assert.deepStrictEqual(flatten({
       hello: {
@@ -320,6 +439,56 @@ suite('Unflatten', function () {
       }
     })
   })
+
+
+  test('Transformed First Key', function () {
+    assert.deepStrictEqual(unflatten({
+      'foo.hello.world.again': 'good morning',
+      'foo.lorem.ipsum.dolor': 'good evening'
+    }, {
+      transformFirst: function (key, delim) {
+        return key.substring(('foo'+delim).length)
+      }
+    }), {
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      },
+      lorem: {
+        ipsum: {
+          dolor: 'good evening'
+        }
+      }
+    })
+  })
+
+
+  test('Transformed First Key and Subsequent Keys', function () {
+    assert.deepStrictEqual(unflatten({
+      'foo.__hello__.__world__.__again__': 'good morning',
+      'foo.__lorem__.__ipsum__.__dolor__': 'good evening'
+    }, {
+      transformKey: function (key) {
+        return key.substring(2, key.length - 2)
+      },
+      transformFirst: function (key, delim) {
+        return key.substring(('foo'+delim).length)
+      }
+    }), {
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      },
+      lorem: {
+        ipsum: {
+          dolor: 'good evening'
+        }
+      }
+    })
+  })
+
 
   test('Messy', function () {
     assert.deepStrictEqual({
