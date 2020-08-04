@@ -161,7 +161,7 @@ flatten({
 
 ### transformKey
 
-Transform each part of a flat key before and after flattening.
+Transform each part of a flat key before and after flattening. 
 
 ```javascript
 var flatten = require('flat')
@@ -194,6 +194,59 @@ unflatten({
 }, {
     transformKey: function(key){
       return key.substring(2, key.length - 2)
+    }
+})
+
+// {
+//     key1: {
+//         keyA: 'valueI'
+//     },
+//     key2: {
+//         keyB: 'valueII'
+//     },
+//     key3: { a: { b: { c: 2 } } }
+// }
+```
+
+### transformFirst
+
+Transforms the top-level key before and after flattening. It has two arguments:
+                                                          
+1. The key to transform
+1. An optional delimiter. This is not required, but allows the transformation to
+add a new key to the transformation.
+
+```javascript
+var flatten = require('flat')
+var unflatten = require('flat').unflatten
+
+flatten({
+    key1: {
+        keyA: 'valueI'
+    },
+    key2: {
+        keyB: 'valueII'
+    },
+    key3: { a: { b: { c: 2 } } }
+}, {
+    transformFirst: function(key, delim){
+      return 'foo' + delim + key;
+    }
+})
+
+// {
+//   'foo.key1.keyA': 'valueI',
+//   'foo.key2.keyB': 'valueII',
+//   'foo.key3.a.b.c': 2
+// }
+
+unflatten({
+      'foo.key1.keyA': 'valueI',
+      'foo.key2.keyB': 'valueII',
+      'foo.key3.a.b.c': 2
+}, {
+    transformFirst: function(key, delim){
+      return key.substring((key+delim).length)
     }
 })
 
