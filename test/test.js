@@ -533,17 +533,17 @@ suite('Unflatten', function () {
   }
 
   test('should not pollute prototype', function () {
-      unflatten({
-          '__proto__.polluted': true
-      });
-      unflatten({
-          'prefix.__proto__.polluted': true
-      });
-      unflatten({
-          'prefix.0.__proto__.polluted': true
-      });
+    unflatten({
+      '__proto__.polluted': true
+    })
+    unflatten({
+      'prefix.__proto__.polluted': true
+    })
+    unflatten({
+      'prefix.0.__proto__.polluted': true
+    })
 
-      assert.notStrictEqual({}.polluted, true);
+    assert.notStrictEqual({}.polluted, true)
   })
 })
 
