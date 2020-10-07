@@ -109,6 +109,26 @@ suite('Flatten', function () {
     })
   })
 
+  test('Array Brackets', function () {
+    assert.deepStrictEqual(flatten({
+      hello: [
+        {
+          world: {
+            again: 'good morning'
+          }
+        }
+      ],
+      arr: [1, 2, 3]
+    }, {
+      arrayBrackets: true
+    }), {
+      'hello[0].world.again': 'good morning',
+      'arr[0]': 1,
+      'arr[1]': 2,
+      'arr[2]': 3
+    })
+  })
+
   test('Empty Objects', function () {
     assert.deepStrictEqual(flatten({
       hello: {
