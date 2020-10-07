@@ -19,9 +19,10 @@ function flatten (target, opts) {
   const delimiter = opts.delimiter || '.'
   const maxDepth = opts.maxDepth
   const transformKey = opts.transformKey || keyIdentity
+  const arrayBrackets = opts.arrayBrackets || false
   const output = {}
 
-  function step (object, prev, currentDepth) {
+  function step (object, prev, currentDepth, addbrackets) {
     currentDepth = currentDepth || 1
     Object.keys(object).forEach(function (key) {
       const value = object[key]
@@ -32,14 +33,22 @@ function flatten (target, opts) {
         type === '[object Object]' ||
         type === '[object Array]'
       )
+      const childhasbrackets = arrayBrackets && Array.isArray(value)
 
-      const newKey = prev
-        ? prev + delimiter + transformKey(key)
-        : transformKey(key)
+      let newKey
+      if (addbrackets) {
+        newKey = prev
+          ? prev + '[' + transformKey(key) + ']'
+          : '[' + transformKey(key) + ']'
+      } else {
+        newKey = prev
+          ? prev + delimiter + transformKey(key)
+          : transformKey(key)
+      }
 
       if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
         (!opts.maxDepth || currentDepth < maxDepth)) {
-        return step(value, newKey, currentDepth + 1)
+        return step(value, newKey, currentDepth + 1, childhasbrackets)
       }
 
       output[newKey] = value

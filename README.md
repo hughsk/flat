@@ -115,6 +115,30 @@ unflatten({
 // }
 ```
 
+### arrayBrackets
+
+When enabled, array children will be wrapped in brackets:
+
+``` javascript
+flatten({
+    arr: [
+        'a',
+        'b'
+    ],
+    arr2: [
+        {
+            keyB: 'valueII'
+        }
+    ]
+}, { arrayBrackets: true })
+
+// {
+//   'arr[0]': 'a',
+//   'arr[1]': 'b',
+//   'arr2[0].keyB': 'valueII'
+// }
+```
+
 ### overwrite
 
 When enabled, existing keys in the unflattened object may be overwritten if they cannot hold a newly encountered nested value:
