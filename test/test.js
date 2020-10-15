@@ -611,6 +611,13 @@ suite('Order of Keys', function () {
 })
 
 suite('CLI', function () {
+  
+  test('prototype cannot be modified', function(done) {
+    let object = unflatten(JSON.parse('{"prototype":{"test":true}}'));
+    assert(!object.prototype)
+    done()
+  })
+  
   test('can take filename', function (done) {
     const cli = path.resolve(__dirname, '..', pkg.bin)
     const pkgJSON = path.resolve(__dirname, '..', 'package.json')
