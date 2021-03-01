@@ -12,7 +12,7 @@
 
 ## Related tickets
 
-> Fix [#1]() 
+> Link to Clubhouse Ticket Goes Here
 
 ## Checklists
 
