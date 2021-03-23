@@ -1,0 +1,38 @@
+name: Publish to npm registry
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "version | patch | minor | major"
+        required: true
+        default: "patch"
+jobs:
+  publish:
+    environment: release 
+    runs-on: ubuntu-latest
+    name: 'Bump version and publish'
+    env:
+      VERSION: ${{ github.event.inputs.version }}
+      NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install packages 
+        run: npm ci
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+      - name: version and publish
+        run: |
+          git config user.name $GITHUB_ACTOR
+          git config user.email gh-actions-${GITHUB_ACTOR}@github.com
+          git remote add gh-origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          npm version $VERSION -m "Version %s"
+          npm publish
+          git push gh-origin $GITHUB_REF --tags
