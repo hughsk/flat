@@ -195,6 +195,33 @@ suite('Flatten', function () {
     })
   })
 
+  test('Transformed Keys using previous path', function () {
+    assert.deepStrictEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      },
+      lorem: {
+        ipsum: {
+          dolor: 'good evening'
+        }
+      }
+    }, {
+      transformKey: function (key, prevPath) {
+        if(!prevPath) {
+          return '$.' + key
+        } else if (prevPath === '$.hello'){
+          return '__' + key
+        }
+        return key + '__'
+      }
+    }), {
+      '$.hello.__world.again__': 'good morning',
+      '$.lorem.ipsum__.dolor__': 'good evening'
+    })
+  })
+
   test('Should keep number in the left when object', function () {
     assert.deepStrictEqual(flatten({
       hello: {

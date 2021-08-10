@@ -34,7 +34,7 @@ function flatten (target, opts) {
       )
 
       const newKey = prev
-        ? prev + delimiter + transformKey(key)
+        ? prev + delimiter + transformKey(key, prev)
         : transformKey(key)
 
       if (!isarray && !isbuffer && isobject && Object.keys(value).length &&

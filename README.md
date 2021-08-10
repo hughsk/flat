@@ -176,14 +176,17 @@ flatten({
     },
     key3: { a: { b: { c: 2 } } }
 }, {
-    transformKey: function(key){
+    transformKey: function(key, prevPath){
+      if (prevPath === '__key2__'){
+          return key;
+      }
       return '__' + key + '__';
     }
 })
 
 // {
 //   '__key1__.__keyA__': 'valueI',
-//   '__key2__.__keyB__': 'valueII',
+//   '__key2__.keyB': 'valueII',
 //   '__key3__.__a__.__b__.__c__': 2
 // }
 
@@ -192,7 +195,7 @@ unflatten({
       '__key2__.__keyB__': 'valueII',
       '__key3__.__a__.__b__.__c__': 2
 }, {
-    transformKey: function(key){
+    transformKey: function(key, prev){
       return key.substring(2, key.length - 2)
     }
 })
