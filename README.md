@@ -176,8 +176,8 @@ flatten({
     },
     key3: { a: { b: { c: 2 } } }
 }, {
-    transformKey: function(key, prevPath){
-      if (prevPath === '__key2__'){
+    transformKey: function(key, parentPath){
+      if (parentPath === '__key2__'){
           return key;
       }
       return '__' + key + '__';

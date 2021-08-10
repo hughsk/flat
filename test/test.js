@@ -195,7 +195,7 @@ suite('Flatten', function () {
     })
   })
 
-  test('Transformed Keys using previous path', function () {
+  test('Transformed Keys using parent path', function () {
     assert.deepStrictEqual(flatten({
       hello: {
         world: {
@@ -208,10 +208,10 @@ suite('Flatten', function () {
         }
       }
     }, {
-      transformKey: function (key, prevPath) {
-        if(!prevPath) {
+      transformKey: function (key, parentPath) {
+        if(!parentPath) {
           return '$.' + key
-        } else if (prevPath === '$.hello'){
+        } else if (parentPath === '$.hello'){
           return '__' + key
         }
         return key + '__'
