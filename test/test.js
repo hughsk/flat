@@ -610,6 +610,32 @@ suite('Order of Keys', function () {
   })
 })
 
+suite('Object Prototype Keys', function () {
+  test('Should be able to unflatten object prototype keys (constructor, toString, valueOf, etc.)', function () {
+    assert.deepStrictEqual({
+      a: {
+        constructor: {
+          constructor: 'hello'
+        }
+      },
+      b: {
+        toString: {
+          toString: 'hello'
+        }
+      },
+      c: {
+        valueOf: {
+          valueOf: 'hello'
+        }
+      }
+    }, unflatten({
+      'a.constructor.constructor': 'hello',
+      'b.toString.toString': 'hello',
+      'c.valueOf.valueOf': 'hello',
+    }))
+  })
+})
+
 suite('CLI', function () {
   test('can take filename', function (done) {
     const cli = path.resolve(__dirname, '..', pkg.bin)
