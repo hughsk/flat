@@ -16,7 +16,7 @@ function keyIdentity (key) {
 function flatten (target, opts) {
   opts = opts || {}
 
-  const delimiter = opts.delimiter || '.'
+  const delimiter = typeof opts.delimiter === 'undefined' ? '.' : opts.delimiter
   const maxDepth = opts.maxDepth
   const transformKey = opts.transformKey || keyIdentity
   const output = {}
@@ -54,7 +54,7 @@ function flatten (target, opts) {
 function unflatten (target, opts) {
   opts = opts || {}
 
-  const delimiter = opts.delimiter || '.'
+  const delimiter = typeof opts.delimiter === 'undefined' ? '.' : opts.delimiter
   const overwrite = opts.overwrite || false
   const transformKey = opts.transformKey || keyIdentity
   const result = {}
