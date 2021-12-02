@@ -1,4 +1,4 @@
-# flat [![Build Status](https://secure.travis-ci.org/hughsk/flat.png?branch=master)](http://travis-ci.org/hughsk/flat)
+# flat [![Build Status](https://github.com/hughsk/flat/actions/workflows/main.yml/badge.svg)](https://github.com/hughsk/flat/actions/workflows/main.yml)
 
 Take a nested Javascript object and flatten it, or unflatten an object with
 delimited keys.
