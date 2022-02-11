@@ -1,6 +1,6 @@
-module.exports = flattenPlus
-flattenPlus.flatten = flatten
-flattenPlus.unflatten = unflatten
+module.exports = flatten
+flatten.flatten = flatten
+flatten.unflatten = unflatten
 
 function isBuffer (obj) {
   return obj &&
