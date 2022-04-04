@@ -122,7 +122,7 @@ When enabled, existing keys in the unflattened object may be overwritten if they
 ```javascript
 unflatten({
     'TRAVIS': 'true',
-    'TRAVIS_DIR': '/home/travis/build/kvz/environmental'
+    'TRAVIS.DIR': '/home/travis/build/kvz/environmental'
 }, { overwrite: true })
 
 // TRAVIS: {
@@ -157,4 +157,80 @@ flatten({
 //   'key2.keyB': 'valueII',
 //   'key3.a': { b: { c: 2 } }
 // }
+```
+
+### transformKey
+
+Transform each part of a flat key before and after flattening.
+
+```javascript
+var flatten = require('flat')
+var unflatten = require('flat').unflatten
+
+flatten({
+    key1: {
+        keyA: 'valueI'
+    },
+    key2: {
+        keyB: 'valueII'
+    },
+    key3: { a: { b: { c: 2 } } }
+}, {
+    transformKey: function(key){
+      return '__' + key + '__';
+    }
+})
+
+// {
+//   '__key1__.__keyA__': 'valueI',
+//   '__key2__.__keyB__': 'valueII',
+//   '__key3__.__a__.__b__.__c__': 2
+// }
+
+unflatten({
+      '__key1__.__keyA__': 'valueI',
+      '__key2__.__keyB__': 'valueII',
+      '__key3__.__a__.__b__.__c__': 2
+}, {
+    transformKey: function(key){
+      return key.substring(2, key.length - 2)
+    }
+})
+
+// {
+//     key1: {
+//         keyA: 'valueI'
+//     },
+//     key2: {
+//         keyB: 'valueII'
+//     },
+//     key3: { a: { b: { c: 2 } } }
+// }
+```
+
+## Command Line Usage
+
+`flat` is also available as a command line tool. You can run it with 
+[`npx`](https://ghub.io/npx):
+
+```sh
+npx flat foo.json
+```
+
+Or install the `flat` command globally:
+ 
+```sh
+npm i -g flat && flat foo.json
+```
+
+Accepts a filename as an argument:
+
+```sh
+flat foo.json
+```
+
+Also accepts JSON on stdin:
+
+```sh
+cat foo.json | flat
 ```
