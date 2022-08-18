@@ -73,7 +73,8 @@ function unflatten (target, opts) {
       isNaN(parsedKey) ||
       key.indexOf('.') !== -1 ||
       opts.object
-    ) ? key
+    )
+      ? key
       : parsedKey
   }
 
@@ -139,7 +140,9 @@ function unflatten (target, opts) {
       if ((overwrite && !isobject) || (!overwrite && recipient[key1] == null)) {
         recipient[key1] = (
           typeof key2 === 'number' &&
-          !opts.object ? [] : {}
+          !opts.object
+            ? []
+            : {}
         )
       }
 
