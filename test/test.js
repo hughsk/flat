@@ -15,7 +15,7 @@ const primitives = {
   Boolean: true,
   Date: new Date(),
   null: null,
-  undefined: undefined
+  undefined
 }
 
 suite('Flatten Primitives', function () {
