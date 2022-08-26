@@ -4,6 +4,7 @@
   "type": "module",
   "main": "index.js",
   "exports": "./index.js",
+  "types": "./index.d.ts",
   "bin": "cli.js",
   "sideEffects": false,
   "engines": {
