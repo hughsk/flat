@@ -17,7 +17,7 @@ Flattens the object - it'll return an object one level deep, regardless of how
 nested the original object was:
 
 ``` javascript
-var flatten = require('flat')
+import { flatten } from 'flat'
 
 flatten({
     key1: {
@@ -38,10 +38,10 @@ flatten({
 
 ### unflatten(original, options)
 
-Flattening is reversible too, you can call `flatten.unflatten()` on an object:
+Flattening is reversible too, you can call `unflatten` on an object:
 
 ``` javascript
-var unflatten = require('flat').unflatten
+import { unflatten } from 'flat'
 
 unflatten({
     'three.levels.deep': 42,
@@ -72,7 +72,7 @@ When enabled, both `flat` and `unflatten` will preserve arrays and their
 contents. This is disabled by default.
 
 ``` javascript
-var flatten = require('flat')
+import { flatten } from 'flat'
 
 flatten({
     this: [
@@ -140,7 +140,7 @@ This only makes sense on ordered arrays, and since we're overwriting data, shoul
 Maximum number of nested objects to flatten.
 
 ``` javascript
-var flatten = require('flat')
+import { flatten } from 'flat'
 
 flatten({
     key1: {
@@ -164,8 +164,7 @@ flatten({
 Transform each part of a flat key before and after flattening.
 
 ```javascript
-var flatten = require('flat')
-var unflatten = require('flat').unflatten
+import { flatten, unflatten } from 'flat'
 
 flatten({
     key1: {

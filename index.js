@@ -1,7 +1,3 @@
-module.exports = flatten
-flatten.flatten = flatten
-flatten.unflatten = unflatten
-
 function isBuffer (obj) {
   return obj &&
     obj.constructor &&
@@ -13,7 +9,7 @@ function keyIdentity (key) {
   return key
 }
 
-function flatten (target, opts) {
+export function flatten (target, opts) {
   opts = opts || {}
 
   const delimiter = opts.delimiter || '.'
@@ -51,7 +47,7 @@ function flatten (target, opts) {
   return output
 }
 
-function unflatten (target, opts) {
+export function unflatten (target, opts) {
   opts = opts || {}
 
   const delimiter = opts.delimiter || '.'

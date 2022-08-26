@@ -1,13 +1,13 @@
 /* globals suite test */
+import assert from 'node:assert'
+import { exec } from 'node:child_process'
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { flatten, unflatten } from '../index.js'
 
-const assert = require('assert')
-const path = require('path')
-const { exec } = require('child_process')
-const pkg = require('../package.json')
-const flat = require('../index')
-
-const flatten = flat.flatten
-const unflatten = flat.unflatten
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
+const pkg = JSON.parse(readFileSync('./package.json'))
 
 const primitives = {
   String: 'good morning',
@@ -361,22 +361,22 @@ suite('Unflatten', function () {
 
   suite('Overwrite + non-object values in key positions', function () {
     test('non-object keys + overwrite should be overwritten', function () {
-      assert.deepStrictEqual(flat.unflatten({ a: null, 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
-      assert.deepStrictEqual(flat.unflatten({ a: 0, 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
-      assert.deepStrictEqual(flat.unflatten({ a: 1, 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
-      assert.deepStrictEqual(flat.unflatten({ a: '', 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
+      assert.deepStrictEqual(unflatten({ a: null, 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
+      assert.deepStrictEqual(unflatten({ a: 0, 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
+      assert.deepStrictEqual(unflatten({ a: 1, 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
+      assert.deepStrictEqual(unflatten({ a: '', 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
     })
 
     test('overwrite value should not affect undefined keys', function () {
-      assert.deepStrictEqual(flat.unflatten({ a: undefined, 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
-      assert.deepStrictEqual(flat.unflatten({ a: undefined, 'a.b': 'c' }, { overwrite: false }), { a: { b: 'c' } })
+      assert.deepStrictEqual(unflatten({ a: undefined, 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
+      assert.deepStrictEqual(unflatten({ a: undefined, 'a.b': 'c' }, { overwrite: false }), { a: { b: 'c' } })
     })
 
     test('if no overwrite, should ignore nested values under non-object key', function () {
-      assert.deepStrictEqual(flat.unflatten({ a: null, 'a.b': 'c' }), { a: null })
-      assert.deepStrictEqual(flat.unflatten({ a: 0, 'a.b': 'c' }), { a: 0 })
-      assert.deepStrictEqual(flat.unflatten({ a: 1, 'a.b': 'c' }), { a: 1 })
-      assert.deepStrictEqual(flat.unflatten({ a: '', 'a.b': 'c' }), { a: '' })
+      assert.deepStrictEqual(unflatten({ a: null, 'a.b': 'c' }), { a: null })
+      assert.deepStrictEqual(unflatten({ a: 0, 'a.b': 'c' }), { a: 0 })
+      assert.deepStrictEqual(unflatten({ a: 1, 'a.b': 'c' }), { a: 1 })
+      assert.deepStrictEqual(unflatten({ a: '', 'a.b': 'c' }), { a: '' })
     })
   })
 
