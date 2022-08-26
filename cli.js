@@ -1,17 +1,15 @@
 #!/usr/bin/env node
-
-const fs = require('fs')
-const path = require('path')
-const readline = require('readline')
-
-const flat = require('./index')
+import fs from 'node:fs'
+import path from 'node:path'
+import readline from 'node:readline'
+import { flatten } from './index.js'
 
 const filepath = process.argv.slice(2)[0]
 if (filepath) {
   // Read from file
   const file = path.resolve(process.cwd(), filepath)
   fs.accessSync(file, fs.constants.R_OK) // allow to throw if not readable
-  out(require(file))
+  out(JSON.parse(fs.readFileSync(file)))
 } else if (process.stdin.isTTY) {
   usage(0)
 } else {
@@ -27,7 +25,7 @@ if (filepath) {
 }
 
 function out (data) {
-  process.stdout.write(JSON.stringify(flat(data), null, 2))
+  process.stdout.write(JSON.stringify(flatten(data), null, 2))
 }
 
 function usage (code) {

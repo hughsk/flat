@@ -1,9 +1,14 @@
 {
   "name": "flat",
   "version": "5.0.2",
+  "type": "module",
   "main": "index.js",
+  "exports": "./index.js",
   "bin": "cli.js",
   "sideEffects": false,
+  "engines": {
+    "node": ">=14.16"
+  },
   "scripts": {
     "test": "mocha -u tdd --reporter spec && standard cli.js index.js test/test.js"
   },
