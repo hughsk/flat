@@ -209,8 +209,7 @@ unflatten({
 
 ## Command Line Usage
 
-`flat` is also available as a command line tool. You can run it with 
-[`npx`](https://ghub.io/npx):
+`flat` is also available as a command line tool. You can run it with [`npx`](https://docs.npmjs.com/cli/v8/commands/npx):
 
 ```sh
 npx flat foo.json
