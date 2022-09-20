@@ -6,6 +6,11 @@
   "exports": "./index.js",
   "types": "./index.d.ts",
   "bin": "cli.js",
+  "files": [
+    "cli.js",
+    "index.js",
+    "index.d.ts"
+  ],
   "sideEffects": false,
   "engines": {
     "node": ">=14.16"
