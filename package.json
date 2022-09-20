@@ -19,9 +19,6 @@
     "mocha": "^10.0.0",
     "standard": "^17.0.0"
   },
-  "directories": {
-    "test": "test"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/hughsk/flat.git"
