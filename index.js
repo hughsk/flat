@@ -127,7 +127,12 @@ export function unflatten (target, opts) {
         type === '[object Object]' ||
         type === '[object Array]'
       )
-
+      
+      // if is a prototype key assign undefined value
+      if (typeof recipient[key1] === 'function') {
+        recipient[key1] = undefined;
+      }
+      
       // do not write over falsey, non-undefined values if overwrite is false
       if (!overwrite && !isobject && typeof recipient[key1] !== 'undefined') {
         return
