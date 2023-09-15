@@ -2,10 +2,15 @@
   "name": "flat",
   "version": "6.0.0",
   "type": "module",
-  "main": "index.js",
-  "exports": "./index.js",
-  "types": "./index.d.ts",
   "bin": "cli.js",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./index.d.ts",
+        "default": "./index.js"
+      }
+    }
+  },
   "files": [
     "cli.js",
     "index.js",
