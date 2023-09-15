@@ -28,7 +28,7 @@
   "license": "BSD-3-Clause",
   "description": "Take a nested Javascript object and flatten it, or unflatten an object with delimited keys",
   "devDependencies": {
-    "standard": "^17.0.0"
+    "standard": "^17.1.0"
   },
   "repository": {
     "type": "git",
