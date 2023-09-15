@@ -2,7 +2,9 @@
   "name": "flat",
   "version": "6.0.0",
   "type": "module",
-  "bin": "cli.js",
+  "bin": {
+    "flat": "cli.js"
+  },
   "exports": {
     ".": {
       "import": {
