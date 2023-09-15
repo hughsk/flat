@@ -612,7 +612,7 @@ suite('Order of Keys', function () {
 
 suite('CLI', function () {
   test('can take filename', function (done) {
-    const cli = path.resolve(__dirname, '..', pkg.bin)
+    const cli = path.resolve(__dirname, '..', pkg.bin.flat)
     const pkgJSON = path.resolve(__dirname, '..', 'package.json')
     exec(`${cli} ${pkgJSON}`, (err, stdout, stderr) => {
       assert.ifError(err)
@@ -622,7 +622,7 @@ suite('CLI', function () {
   })
 
   test('exits with usage if no file', function (done) {
-    const cli = path.resolve(__dirname, '..', pkg.bin)
+    const cli = path.resolve(__dirname, '..', pkg.bin.flat)
     const pkgJSON = path.resolve(__dirname, '..', 'package.json')
     exec(`${cli} ${pkgJSON}`, (err, stdout, stderr) => {
       assert.ifError(err)
@@ -632,7 +632,7 @@ suite('CLI', function () {
   })
 
   test('can take piped file', function (done) {
-    const cli = path.resolve(__dirname, '..', pkg.bin)
+    const cli = path.resolve(__dirname, '..', pkg.bin.flat)
     const pkgJSON = path.resolve(__dirname, '..', 'package.json')
     exec(`cat ${pkgJSON} | ${cli}`, (err, stdout, stderr) => {
       assert.ifError(err)
