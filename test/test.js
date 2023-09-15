@@ -1,8 +1,8 @@
-/* globals suite test */
 import assert from 'node:assert'
 import { exec } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
+import { describe, test } from 'node:test'
 import { fileURLToPath } from 'node:url'
 import { flatten, unflatten } from '../index.js'
 
@@ -18,7 +18,7 @@ const primitives = {
   undefined
 }
 
-suite('Flatten Primitives', function () {
+describe('Flatten Primitives', function () {
   Object.keys(primitives).forEach(function (key) {
     const value = primitives[key]
 
@@ -34,7 +34,7 @@ suite('Flatten Primitives', function () {
   })
 })
 
-suite('Unflatten Primitives', function () {
+describe('Unflatten Primitives', function () {
   Object.keys(primitives).forEach(function (key) {
     const value = primitives[key]
 
@@ -50,7 +50,7 @@ suite('Unflatten Primitives', function () {
   })
 })
 
-suite('Flatten', function () {
+describe('Flatten', function () {
   test('Nested once', function () {
     assert.deepStrictEqual(flatten({
       hello: {
@@ -208,7 +208,7 @@ suite('Flatten', function () {
   })
 })
 
-suite('Unflatten', function () {
+describe('Unflatten', function () {
   test('Nested once', function () {
     assert.deepStrictEqual({
       hello: {
@@ -359,7 +359,7 @@ suite('Unflatten', function () {
     }))
   })
 
-  suite('Overwrite + non-object values in key positions', function () {
+  describe('Overwrite + non-object values in key positions', function () {
     test('non-object keys + overwrite should be overwritten', function () {
       assert.deepStrictEqual(unflatten({ a: null, 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
       assert.deepStrictEqual(unflatten({ a: 0, 'a.b': 'c' }, { overwrite: true }), { a: { b: 'c' } })
@@ -380,7 +380,7 @@ suite('Unflatten', function () {
     })
   })
 
-  suite('.safe', function () {
+  describe('.safe', function () {
     test('Should protect arrays when true', function () {
       assert.deepStrictEqual(flatten({
         hello: [
@@ -427,7 +427,7 @@ suite('Unflatten', function () {
     })
   })
 
-  suite('.object', function () {
+  describe('.object', function () {
     test('Should create object instead of array when true', function () {
       const unflattened = unflatten({
         'hello.you.0': 'ipsum',
@@ -547,7 +547,7 @@ suite('Unflatten', function () {
   })
 })
 
-suite('Arrays', function () {
+describe('Arrays', function () {
   test('Should be able to flatten arrays properly', function () {
     assert.deepStrictEqual({
       'a.0': 'foo',
@@ -587,7 +587,7 @@ suite('Arrays', function () {
   })
 })
 
-suite('Order of Keys', function () {
+describe('Order of Keys', function () {
   test('Order of keys should not be changed after round trip flatten/unflatten', function () {
     const obj = {
       b: 1,
@@ -610,8 +610,8 @@ suite('Order of Keys', function () {
   })
 })
 
-suite('CLI', function () {
-  test('can take filename', function (done) {
+describe('CLI', function () {
+  test('can take filename', function (t, done) {
     const cli = path.resolve(__dirname, '..', pkg.bin.flat)
     const pkgJSON = path.resolve(__dirname, '..', 'package.json')
     exec(`${cli} ${pkgJSON}`, (err, stdout, stderr) => {
@@ -621,7 +621,7 @@ suite('CLI', function () {
     })
   })
 
-  test('exits with usage if no file', function (done) {
+  test('exits with usage if no file', function (t, done) {
     const cli = path.resolve(__dirname, '..', pkg.bin.flat)
     const pkgJSON = path.resolve(__dirname, '..', 'package.json')
     exec(`${cli} ${pkgJSON}`, (err, stdout, stderr) => {
@@ -631,7 +631,7 @@ suite('CLI', function () {
     })
   })
 
-  test('can take piped file', function (done) {
+  test('can take piped file', function (t, done) {
     const cli = path.resolve(__dirname, '..', pkg.bin.flat)
     const pkgJSON = path.resolve(__dirname, '..', 'package.json')
     exec(`cat ${pkgJSON} | ${cli}`, (err, stdout, stderr) => {
