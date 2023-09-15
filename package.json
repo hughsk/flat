@@ -18,7 +18,7 @@
   ],
   "sideEffects": false,
   "engines": {
-    "node": ">=14.16"
+    "node": ">=18"
   },
   "scripts": {
     "test": "mocha -u tdd --reporter spec && standard cli.js index.js test/test.js"
