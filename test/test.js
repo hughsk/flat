@@ -195,6 +195,33 @@ describe('Flatten', function () {
     })
   })
 
+  test('Transformed Keys using parent path', function () {
+    assert.deepStrictEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      },
+      lorem: {
+        ipsum: {
+          dolor: 'good evening'
+        }
+      }
+    }, {
+      transformKey: function (key, parentPath) {
+        if(!parentPath) {
+          return '$.' + key
+        } else if (parentPath === '$.hello'){
+          return '__' + key
+        }
+        return key + '__'
+      }
+    }), {
+      '$.hello.__world.again__': 'good morning',
+      '$.lorem.ipsum__.dolor__': 'good evening'
+    })
+  })
+
   test('Should keep number in the left when object', function () {
     assert.deepStrictEqual(flatten({
       hello: {
