@@ -7,8 +7,8 @@
   },
   "exports": {
     ".": {
-        "types": "./index.d.ts",
-        "default": "./index.js"
+      "types": "./index.d.ts",
+      "default": "./index.js"
     }
   },
   "files": [
