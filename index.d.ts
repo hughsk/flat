@@ -2,7 +2,7 @@ export interface FlattenOptions {
   delimiter?: string;
   maxDepth?: number;
   safe?: boolean;
-  transformKey?: (key: string) => string;
+  transformKey?: (key: string, currentDepth?: number) => string;
 }
 
 export function flatten<T, R>(target: T, options?: FlattenOptions): R;
