@@ -194,6 +194,28 @@ describe('Flatten', function () {
       '__lorem__.__ipsum__.__dolor__': 'good evening'
     })
   })
+   
+  test('Transformed Keys with current depth', function () {
+    assert.deepStrictEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      },
+      lorem: {
+        ipsum: {
+          dolor: 'good evening'
+        }
+      }
+    }, {
+      transformKey: function (key, depth) {
+        return depth > 2 ? '[' + key + ']' : key
+      }
+    }), {
+      'hello.world.[again]': 'good morning',
+      'lorem.ipsum.[dolor]': 'good evening'
+    })
+  })
 
   test('Should keep number in the left when object', function () {
     assert.deepStrictEqual(flatten({

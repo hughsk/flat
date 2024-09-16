@@ -30,8 +30,8 @@ export function flatten (target, opts) {
       )
 
       const newKey = prev
-        ? prev + delimiter + transformKey(key)
-        : transformKey(key)
+        ? prev + delimiter + transformKey(key, currentDepth)
+        : transformKey(key, currentDepth)
 
       if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
         (!opts.maxDepth || currentDepth < maxDepth)) {
