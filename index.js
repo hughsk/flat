@@ -34,7 +34,8 @@ export function flatten (target, opts) {
         : transformKey(key)
 
       if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
-        (!opts.maxDepth || currentDepth < maxDepth)) {
+        (!opts.maxDepth || currentDepth < maxDepth) &&
+        (!opts.ignoreValue || !opts.ignoreValue(value))) {
         return step(value, newKey, currentDepth + 1)
       }
 

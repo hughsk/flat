@@ -206,6 +206,30 @@ describe('Flatten', function () {
       'hello.0500': 'darkness my old friend'
     })
   })
+
+  test('Ignore Values', function () {
+    assert.deepStrictEqual(flatten({
+      hello: {
+        world: {
+          again: 'good morning'
+        }
+      },
+      lorem: {
+        ipsum: {
+          dolor: 'good evening'
+        }
+      }
+    }, {
+      ignoreValue: function (value) {
+        return !!value.again;
+      }
+    }), {
+      'hello.world': {
+        again: 'good morning'
+      },
+      'lorem.ipsum.dolor': 'good evening'
+    })
+  });
 })
 
 describe('Unflatten', function () {
