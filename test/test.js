@@ -206,6 +206,39 @@ describe('Flatten', function () {
       'hello.0500': 'darkness my old friend'
     })
   })
+
+  test('Cyclic object - With depth cycle reference', function() {
+    let objA = { h:"hello" }
+    objA.propA = { A_h:"hello" }
+    objA.propA._propA = { _A_h:"hello" }
+    objA.propA._propA.cycle = objA.propA;
+    
+    try { 
+      flatten(objA);
+    } catch(e) {
+      if(e instanceof RangeError)
+        throw e;
+    }
+
+  })
+
+  test('Cyclic object - Inner reference without cycle', function() {
+    let objA = { h:"hello1" }
+    objA.propA = { A_h:"hello2" }
+    objA.propB = { B_h:"hello3" }
+    objA.propA._propA = { _A_h:"hello4" }
+    objA.propA._propA.no_cycle = objA.propB;
+    
+    assert.deepStrictEqual(flatten(objA),{
+      "h":"hello1",
+      "propA.A_h":"hello2",
+      "propA._propA._A_h":"hello4",
+      "propA._propA.no_cycle.B_h":"hello3",
+      "propB.B_h":"hello3",
+    })
+  })
+
+  
 })
 
 describe('Unflatten', function () {
