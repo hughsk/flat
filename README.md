@@ -207,6 +207,34 @@ unflatten({
 // }
 ```
 
+### transformKey with currentDepth
+
+Transform each part of a flat key before and after flattening with condition of the current depth .
+
+```javascript
+import { flatten, unflatten } from 'flat'
+
+flatten({
+    key1: {
+        keyA: 'valueI'
+    },
+    key2: {
+        keyB: 'valueII'
+    },
+    key3: { a: { b: { c: 2 } } }
+}, {
+    transformKey: function(key, depth){
+      return depth > 2 ? '[' + key + ']' : key;
+    }
+})
+
+// {
+//   'key1.keyA': 'valueI',
+//   'key2.keyB': 'valueII',
+//   'key3.a.[b].[c]': 2
+// }
+```
+
 ## Command Line Usage
 
 `flat` is also available as a command line tool. You can run it with [`npx`](https://docs.npmjs.com/cli/v8/commands/npx):
