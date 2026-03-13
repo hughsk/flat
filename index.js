@@ -17,8 +17,9 @@ export function flatten (target, opts) {
   const transformKey = opts.transformKey || keyIdentity
   const output = {}
 
-  function step (object, prev, currentDepth) {
+  function step (object, prev, currentDepth, referenceMap = new Map) {
     currentDepth = currentDepth || 1
+    referenceMap.set(object, prev || "object-root");
     Object.keys(object).forEach(function (key) {
       const value = object[key]
       const isarray = opts.safe && Array.isArray(value)
@@ -35,11 +36,16 @@ export function flatten (target, opts) {
 
       if (!isarray && !isbuffer && isobject && Object.keys(value).length &&
         (!opts.maxDepth || currentDepth < maxDepth)) {
-        return step(value, newKey, currentDepth + 1)
+
+        if(referenceMap.has(value)) 
+          throw new Error("Circular structure on key '" + key + "' (to '" + referenceMap.get(value) + "')");
+
+          return step(value, newKey, currentDepth + 1, referenceMap)
       }
 
       output[newKey] = value
-    })
+    });
+    referenceMap.delete(object);
   }
 
   step(target)
