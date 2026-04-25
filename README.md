@@ -213,18 +213,21 @@ unflatten({
 
 ```sh
 npx flat foo.json
+npx flat --unflatten foo.json
 ```
 
 Or install the `flat` command globally:
  
 ```sh
 npm i -g flat && flat foo.json
+npm i -g flat && flat --unflatten foo.json
 ```
 
 Accepts a filename as an argument:
 
 ```sh
 flat foo.json
+flat --unflatten foo.json
 ```
 
 Also accepts JSON on stdin:

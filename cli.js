@@ -2,9 +2,12 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import readline from 'node:readline'
-import { flatten } from './index.js'
+import { flatten, unflatten } from './index.js'
 
-const filepath = process.argv.slice(2)[0]
+const args = process.argv.slice(2)
+const shouldUnflatten = args.includes('--unflatten')
+const filepath = args.find(arg => !arg.startsWith('--'))
+
 if (filepath) {
   // Read from file
   const file = path.resolve(process.cwd(), filepath)
@@ -25,15 +28,16 @@ if (filepath) {
 }
 
 function out (data) {
-  process.stdout.write(JSON.stringify(flatten(data), null, 2))
+  const transformed = shouldUnflatten ? unflatten(data) : flatten(data)
+  process.stdout.write(JSON.stringify(transformed, null, 2))
 }
 
 function usage (code) {
   console.log(`
 Usage:
 
-flat foo.json
-cat foo.json | flat
+flat [--unflatten] foo.json
+cat foo.json | flat [--unflatten]
 `)
 
   process.exit(code || 0)
