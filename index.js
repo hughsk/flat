@@ -63,6 +63,10 @@ export function unflatten (target, opts) {
   // safely ensure that the key is
   // an integer.
   function getkey (key) {
+    // `Number('')` is 0 (not NaN), so an empty-string key would be coerced to
+    // the numeric index 0 and renamed; keep it as-is.
+    if (key === '') return key
+
     const parsedKey = Number(key)
 
     return (
