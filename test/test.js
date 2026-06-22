@@ -566,6 +566,12 @@ describe('Arrays', function () {
     }))
   })
 
+  test('Should keep an empty-string key instead of renaming it to 0', function () {
+    assert.deepStrictEqual({ '': 1, x: 2 }, unflatten({ '': 1, x: 2 }))
+    assert.deepStrictEqual({ a: { '': 1 } }, unflatten({ 'a.': 1 }))
+    assert.deepStrictEqual({ '': 1, x: 2 }, unflatten(flatten({ '': 1, x: 2 })))
+  })
+
   test('Array typed objects should be restored by unflatten', function () {
     assert.strictEqual(
       Object.prototype.toString.call(['foo', 'bar'])
