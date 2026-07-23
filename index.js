@@ -99,7 +99,10 @@ export function unflatten (target, opts) {
   target = Object.keys(target).reduce(function (result, key) {
     const type = Object.prototype.toString.call(target[key])
     const isObject = (type === '[object Object]' || type === '[object Array]')
-    if (!isObject || isEmpty(target[key])) {
+    // a `safe`-preserved array is a leaf value here, not a nested object to
+    // re-flatten; pass it through so `object: true` doesn't rebuild it as an
+    // object and break the `safe` contract of keeping arrays intact
+    if (!isObject || isEmpty(target[key]) || (opts.safe && Array.isArray(target[key]))) {
       result[key] = target[key]
       return result
     } else {

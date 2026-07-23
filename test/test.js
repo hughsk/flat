@@ -425,6 +425,12 @@ describe('Unflatten', function () {
         bar: {}
       }), { foo: [], bar: {} })
     })
+
+    test('Should keep arrays when both safe and object are set', function () {
+      const opts = { safe: true, object: true }
+      const flat = flatten({ tags: ['red', 'green', 'blue'] }, opts)
+      assert.deepStrictEqual(unflatten(flat, opts), { tags: ['red', 'green', 'blue'] })
+    })
   })
 
   describe('.object', function () {
