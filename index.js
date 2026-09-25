@@ -122,18 +122,25 @@ export function unflatten (target, opts) {
         return
       }
 
-      const type = Object.prototype.toString.call(recipient[key1])
+      // treat key1 as "already set" only when it's an own, non-undefined
+      // property of recipient -- otherwise a key sharing its name with an
+      // inherited Object.prototype member (eg 'toString', 'constructor')
+      // gets mistaken for an already-set value on a plain `{}` recipient
+      const hasKey1 = Object.prototype.hasOwnProperty.call(recipient, key1) &&
+        typeof recipient[key1] !== 'undefined'
+      const existing = hasKey1 ? recipient[key1] : undefined
+      const type = Object.prototype.toString.call(existing)
       const isobject = (
         type === '[object Object]' ||
         type === '[object Array]'
       )
 
       // do not write over falsey, non-undefined values if overwrite is false
-      if (!overwrite && !isobject && typeof recipient[key1] !== 'undefined') {
+      if (!overwrite && !isobject && hasKey1) {
         return
       }
 
-      if ((overwrite && !isobject) || (!overwrite && recipient[key1] == null)) {
+      if ((overwrite && !isobject) || (!overwrite && existing == null)) {
         recipient[key1] = (
           typeof key2 === 'number' &&
           !opts.object

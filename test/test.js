@@ -545,6 +545,30 @@ describe('Unflatten', function () {
 
     assert.notStrictEqual({}.polluted, true)
   })
+
+  test('keys that shadow inherited Object.prototype members are kept', function () {
+    assert.deepStrictEqual(unflatten({
+      'p5.y': 'The y component of the vector',
+      'p5.toString.returns': 'String: '
+    }), {
+      p5: {
+        y: 'The y component of the vector',
+        toString: { returns: 'String: ' }
+      }
+    })
+
+    assert.deepStrictEqual(unflatten({
+      'a.constructor.x': 1,
+      'a.hasOwnProperty.y': 2,
+      'a.valueOf.z': 3
+    }), {
+      a: {
+        constructor: { x: 1 },
+        hasOwnProperty: { y: 2 },
+        valueOf: { z: 3 }
+      }
+    })
+  })
 })
 
 describe('Arrays', function () {
