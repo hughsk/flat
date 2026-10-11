@@ -51,6 +51,25 @@ describe('Unflatten Primitives', function () {
 })
 
 describe('Flatten', function () {
+  test('Preserves an empty parent key alongside its leaf name', function () {
+    assert.deepStrictEqual(flatten({ '': { value: 1 }, value: 2 }), {
+      '.value': 1,
+      value: 2
+    })
+  })
+
+  test('Preserves repeated empty parent keys with a custom delimiter', function () {
+    assert.deepStrictEqual(flatten({ '': { '': { value: 1 } } }, { delimiter: '/' }), {
+      '//value': 1
+    })
+  })
+
+  test('Preserves parent keys transformed into an empty string', function () {
+    assert.deepStrictEqual(flatten({ parent: { value: 1 } }, {
+      transformKey: key => key === 'parent' ? '' : key
+    }), { '.value': 1 })
+  })
+
   test('Nested once', function () {
     assert.deepStrictEqual(flatten({
       hello: {

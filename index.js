@@ -29,7 +29,7 @@ export function flatten (target, opts) {
         type === '[object Array]'
       )
 
-      const newKey = prev
+      const newKey = prev !== undefined
         ? prev + delimiter + transformKey(key)
         : transformKey(key)
 
