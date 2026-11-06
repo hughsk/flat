@@ -321,6 +321,66 @@ describe('Unflatten', function () {
     })
   })
 
+  test('Transforms nested object keys once when unflattening', function () {
+    const transformKey = key => key.substring(2, key.length - 2)
+    assert.deepStrictEqual(unflatten({
+      __user__: { __email__: 'ada@example.com' }
+    }, { transformKey }), {
+      user: { email: 'ada@example.com' }
+    })
+
+    for (const maxDepth of [undefined, 1]) {
+      assert.deepStrictEqual(unflatten({
+        '__user__.__profile__': {
+          '__contact__.__email__': { __value__: 'ada@example.com' }
+        }
+      }, { transformKey, maxDepth }), {
+        user: { profile: { contact: { email: { value: 'ada@example.com' } } } }
+      })
+    }
+
+    assert.deepStrictEqual(unflatten({
+      __user__: { '__profile__:__email__': 'ada@example.com' }
+    }, { transformKey, delimiter: ':' }), {
+      user: { profile: { email: 'ada@example.com' } }
+    })
+    assert.deepStrictEqual(unflatten({
+      __items__: { __0__: 'ada' }
+    }, { transformKey }), { items: ['ada'] })
+    assert.deepStrictEqual(unflatten({
+      __items__: { __0__: 'ada' }
+    }, { transformKey, object: true }), { items: { 0: 'ada' } })
+  })
+
+  test('Preserves option lookup when normalizing nested objects', function () {
+    const expected = { a: { b: { c: 1 } } }
+    const inherited = Object.create({ delimiter: ':' })
+    const hidden = Object.defineProperty({}, 'delimiter', { value: ':' })
+    const receiver = {
+      separator: ':',
+      get delimiter () { return this.separator },
+      get unrelated () { throw new Error('unused option was read') }
+    }
+    for (const opts of [inherited, hidden, receiver, Object.freeze(receiver)]) {
+      assert.deepStrictEqual(unflatten({ a: { b: { c: 1 } } }, opts), expected)
+    }
+    for (const makeOptions of [
+      values => Object.create(values),
+      values => Object.defineProperties({}, Object.fromEntries(
+        Object.entries(values).map(([key, value]) => [key, { value }])
+      ))
+    ]) {
+      assert.deepStrictEqual(unflatten({ __a__: { __b__: { __c__: 1 } } },
+        makeOptions({
+          delimiter: ':',
+          maxDepth: 1,
+          transformKey: key => key.substring(2, key.length - 2)
+        })), expected)
+      assert.deepStrictEqual(unflatten({ a: { items: [1, 2] } },
+        makeOptions({ delimiter: ':', safe: true })), { a: { items: [1, 2] } })
+    }
+  })
+
   test('Messy', function () {
     assert.deepStrictEqual({
       hello: { world: 'again' },
