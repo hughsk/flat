@@ -106,7 +106,11 @@ export function unflatten (target, opts) {
       return addKeys(
         key,
         result,
-        flatten(target[key], opts)
+        flatten(target[key], {
+          get delimiter () { return opts.delimiter },
+          get maxDepth () { return opts.maxDepth },
+          get safe () { return opts.safe }
+        })
       )
     }
   }, {})
